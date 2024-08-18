@@ -4,40 +4,46 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { currentDateState } from "../../recoil/atoms";
+import logoW from "../../assets/logo.png";
+import theme from "../../theme";
 
-const renderEventContent = (eventInfo: any) => {
+// Mock event data
+const mockEvents = [
+  {
+    id: "1",
+    title: "Sample Event 1",
+    start: "2024-08-20",
+  },
+  {
+    id: "2",
+    title: "Sample Event 2",
+    start: "2024-08-22",
+  },
+];
+
+const renderEventContent = ({ eventInfo }: any) => {
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <Box sx={{ cursor: "pointer" }} width="100%" pl={1}>
-      <Box display="flex" alignItems="center">
-        {eventInfo.backgroundColor !== "" &&
-          eventInfo.timeText &&
-          eventInfo.event._instance &&
-          ("" + eventInfo.event._instance.range.start).slice(0, 10) ===
-            ("" + eventInfo.event._instance.range.end).slice(0, 10) && (
-            <Box
-              bgcolor={eventInfo.backgroundColor}
-              borderRadius={"50%"}
-              width={7}
-              height={7}
-              mx={1}
-            />
-          )}
-        <Typography overflow="hidden" textOverflow="ellipsis">
-          {eventInfo.timeText}
-        </Typography>
-      </Box>
-      <Typography overflow="hidden" textOverflow="ellipsis">
-        {eventInfo.event.title}
-      </Typography>
-    </Box>
+    <img
+      src={logoW}
+      loading="lazy"
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: isSmDown ? "50px" : "115px",
+      }}
+    />
   );
 };
 
 const Calendar: React.FC = () => {
-  const calendarRef = useRef<FullCalendar | null>(null);
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+
+  const calendarRef = useRef<FullCalendar | null>(null);
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClickEvent = (data: any) => {
     console.log(data.event);
@@ -65,6 +71,7 @@ const Calendar: React.FC = () => {
       calendarApi.gotoDate(currentDate);
     }
   }, [currentDate]);
+  console.log(isSmDown);
 
   return (
     <>
@@ -73,12 +80,13 @@ const Calendar: React.FC = () => {
         initialView="dayGridMonth"
         initialDate={currentDate}
         plugins={[dayGridPlugin, interactionPlugin]}
-        eventContent={renderEventContent}
+        events={mockEvents}
+        eventContent={renderEventContent(isSmDown)}
         headerToolbar={false}
         footerToolbar={false}
         editable={false}
         eventClick={handleClickEvent}
-        height={750}
+        height={isSmDown ? 540 : 900}
         locale={koLocale}
         titleFormat={{ year: "numeric", month: "short" }}
         dayHeaders={false}
