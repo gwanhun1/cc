@@ -5,9 +5,12 @@ import App from "./App.tsx";
 import "./style/global.css";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./theme.ts";
+import { RecoilRoot } from "recoil";
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
+  <RecoilRoot>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </RecoilRoot>
 );

@@ -21,11 +21,11 @@ const modalSizes = {
     xl: 700,
   },
   height: {
-    xs: 200,
-    sm: 300,
-    md: 400,
-    lg: 500,
-    xl: 700,
+    xs: 300,
+    sm: 400,
+    md: 500,
+    lg: 550,
+    xl: 650,
   },
 };
 

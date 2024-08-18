@@ -12,7 +12,8 @@ const useDaysPassed = (date: Date): number => {
 
       const today = new Date();
       const timeDifference = today.getTime() - date.getTime();
-      const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const daysDifference =
+        Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
 
       setDaysPassed(Math.max(daysDifference, 0));
     };
