@@ -1,11 +1,42 @@
+import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
 import { COLOR } from "../../style/constants";
 import logo from "../../assets/logo.png";
-import useLogin from "../../hooks/useLogin";
+import useAuthService from "../../hooks/useAuthService";
+import useLoginForm from "../../hooks/useLoginForm";
 
-const LoginPage = () => {
-  const { mode, error, handleModeChange, toggleError } = useLogin("login");
+interface LoginPageProps {
+  closeModal: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
+  const {
+    mode,
+    setMode,
+    login,
+    handleChange,
+    handleModeChange,
+    setLogin,
+    validateForm,
+  } = useLoginForm("login");
+  const { error, join, loginUser } = useAuthService();
+
+  const handleSubmit = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      alert(validationError);
+      return;
+    }
+
+    if (mode === "signUp") {
+      await join(login);
+      setMode("login");
+      alert("🎉 환영합니다 🎉");
+    } else if (mode === "login") {
+      await loginUser(login);
+      closeModal();
+    }
+  };
 
   return (
     <Grid container rowSpacing={2}>
@@ -46,6 +77,9 @@ const LoginPage = () => {
           variant="outlined"
           size="small"
           fullWidth
+          name="id"
+          value={login.id}
+          onChange={handleChange}
         />
       </Grid>
       {mode === "signUp" && (
@@ -56,6 +90,9 @@ const LoginPage = () => {
             variant="outlined"
             size="small"
             fullWidth
+            name="name"
+            value={login.name}
+            onChange={handleChange}
           />
         </Grid>
       )}
@@ -66,25 +103,28 @@ const LoginPage = () => {
           variant="outlined"
           size="small"
           fullWidth
+          name="password"
+          type={mode === "login" ? "password" : undefined}
+          value={login.password}
+          onChange={handleChange}
         />
       </Grid>
-      {error && mode === "login" && (
+      {error && (
         <Grid item xs={12} textAlign="center">
           <Typography variant="subtitle2" color={COLOR.blue}>
-            아이디 및 비밀번호를 확인해주세요.
+            {mode === "login"
+              ? "아이디 및 비밀번호를 확인해주세요."
+              : "아이디,이름 및 비밀번호 양식을 맞춰주세요."}
           </Typography>
         </Grid>
       )}
-      {error && mode === "signUp" && (
-        <Grid item xs={12} textAlign="center">
-          <Typography variant="subtitle2" color={COLOR.blue}>
-            아이디,이름 및 비밀번호 양식을 맞춰주세요.
-          </Typography>
-        </Grid>
-      )}
-
       <Grid item xs={12}>
-        <Button fullWidth variant="contained" size="large">
+        <Button
+          fullWidth
+          variant="contained"
+          size="large"
+          onClick={handleSubmit}
+        >
           {mode === "login" ? "로그인" : "회원가입"}
         </Button>
       </Grid>
@@ -95,7 +135,7 @@ const LoginPage = () => {
             variant="outlined"
             size="large"
             name="signUp"
-            onClick={(e) => handleModeChange(e)}
+            onClick={handleModeChange}
           >
             회원가입 하러가기
           </Button>

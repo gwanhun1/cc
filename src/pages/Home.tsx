@@ -1,8 +1,7 @@
-import { Box, Button, useMediaQuery } from "@mui/material";
-import React from "react";
+import { Box, useMediaQuery } from "@mui/material";
+import React, { useEffect } from "react";
 import { useModal } from "../hooks/useModal";
 import LoginPage from "../components/auth/LoginPage";
-import height from "../../node_modules/dom-helpers/esm/height";
 import CustomModal from "../components/common/CustomModal";
 import CalendarContainer from "../features/Home/CalendarContainer";
 import theme from "../theme";
@@ -16,6 +15,16 @@ const boxStyle = {
 const Home = () => {
   const { isOpen, openModal, closeModal } = useModal();
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (token) {
+      return;
+    } else {
+      openModal();
+    }
+  }, [token]);
 
   return (
     <Box
@@ -37,9 +46,8 @@ const Home = () => {
       >
         <CalendarContainer />
       </Box>
-
       <CustomModal isOpen={isOpen} onClose={closeModal} width="sm" height="lg">
-        <LoginPage />
+        <LoginPage closeModal={closeModal} />
       </CustomModal>
     </Box>
   );

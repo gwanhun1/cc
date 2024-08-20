@@ -71,7 +71,6 @@ const Calendar: React.FC = () => {
       calendarApi.gotoDate(currentDate);
     }
   }, [currentDate]);
-  console.log(isSmDown);
 
   return (
     <>

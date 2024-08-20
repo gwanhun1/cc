@@ -17,6 +17,7 @@ const useLogin = (initialMode: Mode = "login") => {
 
   return {
     mode,
+    setMode,
     error,
     handleModeChange,
     toggleError,

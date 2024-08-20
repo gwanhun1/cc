@@ -57,8 +57,11 @@ export default function Nav() {
     console.log("Profile clicked");
   };
 
-  const handleAccountClick = () => {
-    console.log("My Account clicked");
+  const handleLogoutClick = () => {
+    if (window.confirm("정말 로그아웃하시겠습니까? 😢")) {
+      localStorage.removeItem("authToken");
+      location.reload();
+    }
   };
 
   return (
@@ -116,7 +119,7 @@ export default function Nav() {
                 menuItems={[
                   { label: "Search", onClick: handleProfileClick },
                   { label: "Profile", onClick: handleProfileClick },
-                  { label: "Love", onClick: handleAccountClick },
+                  { label: "Love", onClick: handleLogoutClick },
                 ]}
               />
             ) : (
@@ -132,7 +135,7 @@ export default function Nav() {
                     index === 1
                       ? [
                           { label: "Profile", onClick: handleProfileClick },
-                          { label: "My Account", onClick: handleAccountClick },
+                          { label: "Logout", onClick: handleLogoutClick },
                         ]
                       : undefined
                   }
