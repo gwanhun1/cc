@@ -8,7 +8,7 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { currentDateState } from "../../recoil/atoms";
 import logoW from "../../assets/logo.png";
 import theme from "../../theme";
-
+import "./styles.css";
 // Mock event data
 const mockEvents = [
   {
@@ -33,7 +33,7 @@ const renderEventContent = ({ eventInfo }: any) => {
       style={{
         position: "absolute",
         width: "100%",
-        height: isSmDown ? "50px" : "115px",
+        height: isSmDown ? "49px" : "115px",
       }}
     />
   );
@@ -86,7 +86,7 @@ const Calendar: React.FC = () => {
         footerToolbar={false}
         editable={false}
         eventClick={handleClickEvent}
-        height={isSmDown ? 540 : 900}
+        height={isSmDown ? 500 : 900}
         locale={koLocale}
         titleFormat={{ year: "numeric", month: "short" }}
         dayHeaders={false}

@@ -21,6 +21,7 @@ const Home = () => {
     <Box
       sx={{
         ...boxStyle,
+        padding: isSmDown ? 2 : 0,
         marginTop: isSmDown ? 5 : 8,
         justifyContent: "center",
       }}
