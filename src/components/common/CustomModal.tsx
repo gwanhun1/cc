@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Box, ModalProps, Stack, Button } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
-import CustomBackdrop from "./CustomBackDrop";
+import CustomBackdrop from "./CustomBackdrop";
 
 interface CustomModalProps extends Omit<ModalProps, "children" | "open"> {
   isOpen: boolean;
