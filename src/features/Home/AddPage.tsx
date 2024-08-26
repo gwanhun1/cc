@@ -1,13 +1,24 @@
-import { Box, IconButton, TextField, Typography } from "@mui/material";
+import { Box, IconButton, TextField, Typography, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { COLOR } from "../../style/constants";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import BasicDatePicker from "../../components/common/DatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
-const AddPage = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef(null);
+interface AddPageProps {
+  onClose: () => void;
+  setUpload: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AddPage = ({ onClose, setUpload }: AddPageProps) => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { uploadImage, status, error } = useImageUpload();
 
   const handleBoxClick = () => {
     if (fileInputRef.current) {
@@ -15,19 +26,57 @@ const AddPage = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files) {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      setSelectedImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        setPreviewImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleDeleteImage = () => {
+    setSelectedImage(null);
+    setPreviewImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (selectedImage && title && date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      const dateString = `${year}-${month}-${day}`;
+
+      try {
+        await uploadImage({ file: selectedImage, title, date: dateString });
+
+        setSelectedImage(null);
+        setPreviewImage(null);
+        setTitle("");
+        setDate(null);
+        onClose();
+        setUpload(true);
+
+        setTimeout(() => {
+          setUpload(false);
+        }, 500);
+      } catch (error) {
+        console.error("Image upload failed", error);
+      }
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <Box display="flex" justifyContent="space-between">
         <Box>
           <Typography variant="h6" color={COLOR.pink} fontWeight="bold">
@@ -37,9 +86,9 @@ const AddPage = () => {
             Upload an image and enter a title
           </Typography>
         </Box>
-        {true && (
+        {!previewImage && (
           <Box>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleDeleteImage}>
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -55,18 +104,16 @@ const AddPage = () => {
           border: 2,
           borderColor: "gray",
           borderRadius: 1,
-          height: "50%",
+          height: "200px",
           cursor: "pointer",
-          backgroundImage: selectedImage ? `url(${selectedImage})` : "none",
+          backgroundImage: previewImage ? `url(${previewImage})` : "none",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
         onClick={handleBoxClick}
       >
-        {!selectedImage && (
-          <ImageSearchIcon fontSize="large" color="disabled" />
-        )}
+        {!previewImage && <ImageSearchIcon fontSize="large" color="disabled" />}
         <input
           ref={fileInputRef}
           type="file"
@@ -76,16 +123,28 @@ const AddPage = () => {
         />
       </Box>
 
-      <BasicDatePicker />
+      <BasicDatePicker value={date} onChange={(newDate) => setDate(newDate)} />
       <TextField
         id="outlined-basic"
         label="제목"
         variant="outlined"
         size="small"
         fullWidth
-        sx={{ marginTop: 1 }}
+        sx={{ marginTop: 1, marginBottom: 1 }}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
-    </>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        disabled={!selectedImage || !title || !date || status === "uploading"}
+      >
+        {status === "uploading" ? "Uploading..." : "Save"}
+      </Button>
+      {error && <Typography color="error">Error: {error}</Typography>}
+    </form>
   );
 };
 

@@ -5,7 +5,7 @@ import CustomBackdrop from "./CustomBackdrop";
 
 interface CustomModalProps extends Omit<ModalProps, "children" | "open"> {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   onConfirm?: () => void;
   children: React.ReactNode;
   width?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -23,7 +23,7 @@ const modalSizes = {
   height: {
     xs: 300,
     sm: 400,
-    md: 500,
+    md: 520,
     lg: 550,
     xl: 650,
   },
@@ -62,7 +62,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     <Modal
       open={isOpen}
       onClose={(event, reason) => {
-        if (reason !== "backdropClick") {
+        if (reason !== "backdropClick" && onClose) {
           onClose();
         }
       }}
@@ -72,15 +72,17 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <Box sx={modalStyles}>
         <Box sx={{ flexGrow: 1 }}>{children}</Box>
         <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
-          <Button variant="outlined" onClick={onClose}>
-            취소
-          </Button>
+          {onClose && (
+            <Button variant="outlined" onClick={onClose}>
+              취소
+            </Button>
+          )}
           {onConfirm && (
             <Button
               variant="contained"
               onClick={() => {
                 if (onConfirm) onConfirm();
-                onClose();
+                onClose && onClose();
               }}
             >
               확인

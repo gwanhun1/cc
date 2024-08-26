@@ -141,6 +141,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
           </Button>
         </Grid>
       )}
+      {mode !== "login" && (
+        <Grid item xs={12}>
+          <Button
+            fullWidth
+            variant="outlined"
+            size="large"
+            name="login"
+            onClick={handleModeChange}
+          >
+            로그인 하러가기
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -46,7 +46,7 @@ const Home = () => {
       >
         <CalendarContainer />
       </Box>
-      <CustomModal isOpen={isOpen} onClose={closeModal} width="sm" height="lg">
+      <CustomModal isOpen={isOpen} width="sm" height="md">
         <LoginPage closeModal={closeModal} />
       </CustomModal>
     </Box>

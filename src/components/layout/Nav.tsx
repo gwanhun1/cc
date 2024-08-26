@@ -17,6 +17,7 @@ import theme from "../../theme";
 import logoW from "../../assets/logoW.png";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";
+import useUserData from "../../hooks/useUserData";
 
 const boxStyle = {
   display: "flex",
@@ -63,6 +64,8 @@ export default function Nav() {
       location.reload();
     }
   };
+
+  const { user, userData, loading } = useUserData();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -132,9 +135,12 @@ export default function Nav() {
                   hasMenu={item.hasMenu}
                   sx={{ ml: index > 0 ? 1 : 0 }}
                   menuItems={
-                    index === 1
+                    index === 1 && user
                       ? [
-                          { label: "Profile", onClick: handleProfileClick },
+                          {
+                            label: user.auth.currentUser.displayName ?? "",
+                            onClick: handleProfileClick,
+                          },
                           { label: "Logout", onClick: handleLogoutClick },
                         ]
                       : undefined

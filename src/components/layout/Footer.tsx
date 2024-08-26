@@ -14,9 +14,7 @@ const Footer = () => {
         textAlign: "center",
       }}
     >
-      <Typography variant="subtitle2">
-        © 2024 Your Company. All rights reserved.
-      </Typography>
+      <Typography variant="subtitle2">© 2024 made in junggwanhun.</Typography>
     </Box>
   );
 };

@@ -6,18 +6,20 @@ import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { currentDateState } from "../../recoil/atoms";
-import mock0 from "../../assets/mock0.jpg";
-import mock1 from "../../assets/mock1.jpg";
-import mock2 from "../../assets/mock2.jpg";
-import mock3 from "../../assets/mock3.jpg";
-import mock4 from "../../assets/mock4.jpg";
-import mock5 from "../../assets/mock5.jpg";
-import mock6 from "../../assets/mock6.jpg";
-import mock7 from "../../assets/mock7.jpg";
+import mock0 from "../../assets/mock0.svg";
+import mock1 from "../../assets/mock1.svg";
+import mock2 from "../../assets/mock2.svg";
+import mock3 from "../../assets/mock3.svg";
+import mock4 from "../../assets/mock4.svg";
+import mock5 from "../../assets/mock5.svg";
+import mock6 from "../../assets/mock6.svg";
+import mock7 from "../../assets/mock7.svg";
 import theme from "../../theme";
 import "./styles.css";
 import useMockEvents from "../../hooks/useMockEvents";
 import EventContent from "../../components/home/EventContent";
+import { useMonthlyImages } from "../../hooks/useImageFetch";
+import Loading from "../../components/common/Loading";
 
 export const imageMap = {
   mock0: mock0,
@@ -35,16 +37,21 @@ const renderEventContent = (eventInfo: {
   timeText: any;
   event: {
     title: any;
-    _def: { extendedProps: { img: string } };
+    _def: { extendedProps: { img: string; imageUrl?: string } };
   };
 }) => {
   const imageKey = eventInfo.event._def.extendedProps.img;
-  const imageUrl = imageMap[imageKey] || ""; // Fallback if image is not found
+  const imageUrl = imageMap[imageKey] || "";
 
-  return <EventContent imageUrl={imageUrl} title={eventInfo.event.title} />;
+  return (
+    <EventContent
+      imageUrl={eventInfo.event._def.extendedProps.imageUrl ?? imageUrl}
+      title={eventInfo.event.title}
+    />
+  );
 };
 
-const Calendar: React.FC = () => {
+const Calendar = ({ upload }: { upload: boolean }) => {
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const eventMockData = useMockEvents();
 
@@ -55,22 +62,6 @@ const Calendar: React.FC = () => {
     console.log(data.event);
   };
 
-  const goToNextMonth = () => {
-    if (calendarRef.current) {
-      const calendarApi = calendarRef.current.getApi();
-      calendarApi.next();
-      setCurrentDate(calendarApi.getDate());
-    }
-  };
-
-  const goToPrevMonth = () => {
-    if (calendarRef.current) {
-      const calendarApi = calendarRef.current.getApi();
-      calendarApi.prev();
-      setCurrentDate(calendarApi.getDate());
-    }
-  };
-
   useEffect(() => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -78,6 +69,15 @@ const Calendar: React.FC = () => {
     }
   }, [currentDate]);
 
+  const { images, status, refetch } = useMonthlyImages("2024-08");
+
+  useEffect(() => {
+    refetch();
+  }, [upload]);
+
+  if (status === "loading") {
+    return <Loading />;
+  }
   return (
     <>
       <FullCalendar
@@ -85,7 +85,7 @@ const Calendar: React.FC = () => {
         initialView="dayGridMonth"
         initialDate={currentDate}
         plugins={[dayGridPlugin, interactionPlugin]}
-        events={eventMockData}
+        events={images && images.length !== 0 ? images : eventMockData}
         eventContent={renderEventContent}
         headerToolbar={false}
         footerToolbar={false}

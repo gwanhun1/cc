@@ -1,5 +1,5 @@
 import { Box, Button, Grid, useMediaQuery } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Calendar from "./Calendar";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";
@@ -7,9 +7,11 @@ import theme from "../../theme";
 import { useModal } from "../../hooks/useModal";
 import CustomModal from "../../components/common/CustomModal";
 import AddPage from "./AddPage";
+import Complate from "../../components/common/Complate";
 
 const CalendarContainer = () => {
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+  const [upload, setUpload] = useState(false);
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleReset = () => {
@@ -42,17 +44,11 @@ const CalendarContainer = () => {
           Reset
         </Button>
       </Box>
-      <Calendar />
-
-      <CustomModal
-        isOpen={isOpen}
-        onClose={closeModal}
-        onConfirm={() => {}}
-        width="sm"
-        height="md"
-      >
-        <AddPage />
+      <Calendar upload={upload} />
+      <CustomModal isOpen={isOpen} onClose={closeModal} width="sm" height="md">
+        <AddPage onClose={closeModal} setUpload={setUpload} />
       </CustomModal>
+      {upload && <Complate />}
     </Box>
   );
 };
