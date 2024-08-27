@@ -27,7 +27,6 @@ const useAuthService = () => {
       if (login.name) {
         await updateProfile(user, { displayName: login.name });
       }
-      console.log("User created successfully:", user.uid);
     } catch (error) {
       const { code, message } = error as FirebaseError;
       console.error("Error during sign-up:", code, message);

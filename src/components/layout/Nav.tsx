@@ -18,6 +18,9 @@ import logoW from "../../assets/logoW.png";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";
 import useUserData from "../../hooks/useUserData";
+import { formatYearMonth } from "../../utils/formatYearMonth";
+import { useMonthlyImages } from "../../hooks/useImageFetch";
+import { getAuth, signOut } from "firebase/auth";
 
 const boxStyle = {
   display: "flex",
@@ -58,10 +61,36 @@ export default function Nav() {
     console.log("Profile clicked");
   };
 
-  const handleLogoutClick = () => {
+  // const { setImages } = useMonthlyImages(formatYearMonth(currentDate));
+
+  const handleLogoutClick = async () => {
+    const auth = getAuth();
+
     if (window.confirm("정말 로그아웃하시겠습니까? 😢")) {
-      localStorage.removeItem("authToken");
-      location.reload();
+      try {
+        // Firebase 로그아웃
+        await signOut(auth);
+
+        // 로컬 스토리지 정리
+        localStorage.clear();
+
+        // 세션 스토리지 정리
+        sessionStorage.clear();
+
+        // 쿠키 삭제
+        document.cookie.split(";").forEach((c) => {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
+        });
+
+        location.reload();
+      } catch (error) {
+        alert("로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
     }
   };
 

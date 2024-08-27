@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getFirestore, collection, query, getDocs } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 // 타입 정의
@@ -17,6 +17,7 @@ type UseMonthlyImagesResult = {
   status: "idle" | "loading" | "success" | "error";
   error: string | null;
   refetch: () => Promise<void>;
+  setImages: React.Dispatch<React.SetStateAction<Image[]>>;
 };
 
 // 커스텀 훅
@@ -64,6 +65,7 @@ export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
       setStatus("success");
     } catch (err) {
       setStatus("error");
+      console.error("Error fetching images:", err);
       if (err instanceof FirebaseError) {
         setError(err.message);
       } else {
@@ -73,12 +75,21 @@ export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
   };
 
   useEffect(() => {
-    fetchImages();
-  }, [db, auth, monthKey]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchImages();
+      } else {
+        setStatus("error");
+        setError("User not authenticated");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, monthKey]);
 
   const refetch = () => {
     return fetchImages();
   };
 
-  return { images, status, error, refetch };
+  return { images, status, error, refetch, setImages };
 }

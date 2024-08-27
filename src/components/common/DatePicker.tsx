@@ -4,6 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import { formatYearMonth } from "../../utils/formatYearMonth";
+import { useMonthlyImages } from "../../hooks/useImageFetch";
+import { useRecoilState } from "recoil";
+import { currentDateState } from "../../recoil/atoms";
 
 interface BasicDatePickerProps {
   value: Date | null;
@@ -18,6 +22,22 @@ export default function BasicDatePicker({
     onChange(newValue ? newValue.toDate() : null);
   };
 
+  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+
+  const { images, status, refetch } = useMonthlyImages(
+    formatYearMonth(currentDate)
+  );
+
+  // 이미지가 있는 날짜들을 Set으로 저장
+  const disabledDates = React.useMemo(() => {
+    return new Set(images.map((img) => img.date));
+  }, [images]);
+
+  const shouldDisableDate = (date: Dayjs) => {
+    const dateString = date.format("YYYY-MM-DD"); // Dayjs 객체를 YYYY-MM-DD 형식으로 변환
+    return disabledDates.has(dateString);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={["DatePicker"]}>
@@ -28,6 +48,7 @@ export default function BasicDatePicker({
           }}
           value={value ? dayjs(value) : null}
           onChange={handleDateChange}
+          shouldDisableDate={shouldDisableDate}
         />
       </DemoContainer>
     </LocalizationProvider>

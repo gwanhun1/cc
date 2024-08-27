@@ -20,6 +20,7 @@ import useMockEvents from "../../hooks/useMockEvents";
 import EventContent from "../../components/home/EventContent";
 import { useMonthlyImages } from "../../hooks/useImageFetch";
 import Loading from "../../components/common/Loading";
+import { formatYearMonth } from "../../utils/formatYearMonth";
 
 export const imageMap = {
   mock0: mock0,
@@ -69,15 +70,14 @@ const Calendar = ({ upload }: { upload: boolean }) => {
     }
   }, [currentDate]);
 
-  const { images, status, refetch } = useMonthlyImages("2024-08");
+  const { images, status, refetch, showLoading } = useMonthlyImages(
+    formatYearMonth(currentDate)
+  );
 
   useEffect(() => {
     refetch();
   }, [upload]);
 
-  if (status === "loading") {
-    return <Loading />;
-  }
   return (
     <>
       <FullCalendar

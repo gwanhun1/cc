@@ -4,6 +4,12 @@ import { COLOR } from "../../style/constants";
 import logo from "../../assets/logo.png";
 import useAuthService from "../../hooks/useAuthService";
 import useLoginForm from "../../hooks/useLoginForm";
+import { useMonthlyImages } from "../../hooks/useImageFetch";
+import { formatYearMonth } from "../../utils/formatYearMonth";
+import { useRecoilState } from "recoil";
+import { currentDateState } from "../../recoil/atoms";
+import Loading from "../common/Loading";
+import { getAuth } from "firebase/auth";
 
 interface LoginPageProps {
   closeModal: () => void;
@@ -20,6 +26,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
     validateForm,
   } = useLoginForm("login");
   const { error, join, loginUser } = useAuthService();
+  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+
+  const { images, status, refetch } = useMonthlyImages(
+    formatYearMonth(currentDate)
+  );
 
   const handleSubmit = async () => {
     const validationError = validateForm();
@@ -34,9 +45,23 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
       alert("🎉 환영합니다 🎉");
     } else if (mode === "login") {
       await loginUser(login);
+
+      // Wait until the auth state is fully updated
+      const auth = getAuth();
+      if (auth.currentUser) {
+        await refetch();
+      } else {
+        // Optionally handle the case where the user is still not authenticated
+        console.error("User is not authenticated after login.");
+      }
+
       closeModal();
     }
   };
+
+  if (status === "loading") {
+    return <Loading />;
+  }
 
   return (
     <Grid container rowSpacing={2}>
