@@ -3,29 +3,34 @@ import { getFirestore, collection, query, getDocs } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
-// 타입 정의
 type Image = {
   id: string;
   imageUrl: string;
   title: string;
   date: string;
-  timestamp: any; // Firestore timestamp type
+  timestamp: any;
 };
+
+type FetchStatus = "idle" | "loading" | "success" | "error";
 
 type UseMonthlyImagesResult = {
   images: Image[];
-  status: "idle" | "loading" | "success" | "error";
+  status: FetchStatus;
   error: string | null;
   refetch: () => Promise<void>;
   setImages: React.Dispatch<React.SetStateAction<Image[]>>;
 };
 
-// 커스텀 훅
+function cacheImages(images: Image[]): void {
+  images.forEach((image) => {
+    const img = new Image();
+    img.src = image.imageUrl;
+  });
+}
+
 export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
   const [images, setImages] = useState<Image[]>([]);
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<FetchStatus>("idle");
   const [error, setError] = useState<string | null>(null);
 
   const db = getFirestore();
@@ -60,6 +65,8 @@ export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
           ...(doc.data() as Omit<Image, "id">),
         });
       });
+
+      cacheImages(imagesList);
 
       setImages(imagesList);
       setStatus("success");

@@ -11,17 +11,18 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <img
-      src={imageUrl}
-      loading="lazy"
+    <div
       style={{
         position: "absolute",
         width: "100%",
         height: isSmDown ? "49px" : "115px",
-        objectFit: "cover",
+        backgroundImage: `url(${imageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
-      alt={title}
-    />
+      aria-label={title} // Accessibility improvement
+    ></div>
   );
 };
 

@@ -70,7 +70,7 @@ const Calendar = ({ upload }: { upload: boolean }) => {
     }
   }, [currentDate]);
 
-  const { images, status, refetch, showLoading } = useMonthlyImages(
+  const { images, status, refetch } = useMonthlyImages(
     formatYearMonth(currentDate)
   );
 
