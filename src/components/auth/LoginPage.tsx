@@ -28,9 +28,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
   const { error, join, loginUser } = useAuthService();
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
 
-  const { images, status, refetch } = useMonthlyImages(
-    formatYearMonth(currentDate)
-  );
+  const { refetch } = useMonthlyImages(formatYearMonth(currentDate));
 
   const handleSubmit = async () => {
     const validationError = validateForm();
@@ -58,10 +56,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
       closeModal();
     }
   };
-
-  if (status === "loading") {
-    return <Loading />;
-  }
 
   return (
     <Grid container rowSpacing={2}>

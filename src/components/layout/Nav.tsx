@@ -15,11 +15,15 @@ import NavProfileButton from "./NavProfileButton";
 import { useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import logoW from "../../assets/logoW.png";
-import { useRecoilState } from "recoil";
-import { currentDateState } from "../../recoil/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  currentDateState,
+  errorState,
+  fetchStatusState,
+  imagesState,
+  loginState,
+} from "../../recoil/atoms";
 import useUserData from "../../hooks/useUserData";
-import { formatYearMonth } from "../../utils/formatYearMonth";
-import { useMonthlyImages } from "../../hooks/useImageFetch";
 import { getAuth, signOut } from "firebase/auth";
 
 const boxStyle = {
@@ -28,6 +32,11 @@ const boxStyle = {
 };
 
 export default function Nav() {
+  const setLoginState = useSetRecoilState(loginState);
+  const setImagesState = useSetRecoilState(imagesState);
+  const setFetchStatusState = useSetRecoilState(fetchStatusState);
+  const setErrorState = useSetRecoilState(errorState);
+
   const daysPassed = useDaysPassed(new Date("2024-06-01"));
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
@@ -51,7 +60,7 @@ export default function Nav() {
     { icon: <SearchIcon />, label: "search" },
     { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
     {
-      icon: <FavoriteIcon fontSize="large" />,
+      icon: <FavoriteIcon fontSize="small" />,
       label: "favorite",
       badge: daysPassed,
     },
@@ -61,23 +70,14 @@ export default function Nav() {
     console.log("Profile clicked");
   };
 
-  // const { setImages } = useMonthlyImages(formatYearMonth(currentDate));
-
   const handleLogoutClick = async () => {
     const auth = getAuth();
 
     if (window.confirm("정말 로그아웃하시겠습니까? 😢")) {
       try {
-        // Firebase 로그아웃
         await signOut(auth);
-
-        // 로컬 스토리지 정리
         localStorage.clear();
-
-        // 세션 스토리지 정리
         sessionStorage.clear();
-
-        // 쿠키 삭제
         document.cookie.split(";").forEach((c) => {
           document.cookie = c
             .replace(/^ +/, "")
@@ -86,7 +86,10 @@ export default function Nav() {
               "=;expires=" + new Date().toUTCString() + ";path=/"
             );
         });
-
+        setLoginState({ id: "", password: "", name: "" });
+        setImagesState([]);
+        setFetchStatusState("idle");
+        setErrorState(null);
         location.reload();
       } catch (error) {
         alert("로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -122,6 +125,7 @@ export default function Nav() {
               icon={<KeyboardArrowLeftIcon />}
               label="previous month"
               onClick={goToPrevMonth}
+              sx={{ padding: isSmDown ? "4px" : "8px" }}
             />
             <Typography variant="h6" component="div">
               {monthYear}
@@ -153,6 +157,7 @@ export default function Nav() {
                   { label: "Profile", onClick: handleProfileClick },
                   { label: "Love", onClick: handleLogoutClick },
                 ]}
+                sx={{ padding: "4px" }}
               />
             ) : (
               navItems.map((item, index) => (
@@ -181,5 +186,6 @@ export default function Nav() {
         </Toolbar>
       </AppBar>
     </Box>
+    // </AppBar>
   );
 }

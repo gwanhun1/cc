@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { getFirestore, collection, query, getDocs } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { useEffect } from "react";
+import { errorState, fetchStatusState, imagesState } from "../recoil/atoms";
 
 type Image = {
   id: string;
@@ -13,14 +15,6 @@ type Image = {
 
 type FetchStatus = "idle" | "loading" | "success" | "error";
 
-type UseMonthlyImagesResult = {
-  images: Image[];
-  status: FetchStatus;
-  error: string | null;
-  refetch: () => Promise<void>;
-  setImages: React.Dispatch<React.SetStateAction<Image[]>>;
-};
-
 function cacheImages(images: Image[]): void {
   images.forEach((image) => {
     const img = new Image();
@@ -28,10 +22,30 @@ function cacheImages(images: Image[]): void {
   });
 }
 
-export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
-  const [images, setImages] = useState<Image[]>([]);
-  const [status, setStatus] = useState<FetchStatus>("idle");
-  const [error, setError] = useState<string | null>(null);
+// 새로운 유틸리티 함수: 현재 월을 기준으로 이전 1개월을 포함한 2개월의 키를 생성
+function getThreeMonthKeys(currentMonthKey: string): string[] {
+  const [year, month] = currentMonthKey.split("-").map(Number);
+  const monthKeys: string[] = [];
+
+  for (let i = 0; i < 2; i++) {
+    let targetMonth = month - i;
+    let targetYear = year;
+
+    if (targetMonth <= 0) {
+      targetMonth += 12;
+      targetYear -= 1;
+    }
+
+    monthKeys.push(`${targetYear}-${targetMonth.toString().padStart(2, "0")}`);
+  }
+
+  return monthKeys;
+}
+
+export function useMonthlyImages(currentMonthKey: string) {
+  const [images, setImages] = useRecoilState(imagesState);
+  const setStatus = useSetRecoilState(fetchStatusState);
+  const setError = useSetRecoilState(errorState);
 
   const db = getFirestore();
   const auth = getAuth();
@@ -47,28 +61,32 @@ export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
     }
 
     try {
-      const userRef = collection(
-        db,
-        "users",
-        auth.currentUser.uid,
-        "months",
-        monthKey,
-        "images"
-      );
-      const q = query(userRef);
-      const querySnapshot = await getDocs(q);
+      const monthKeys = getThreeMonthKeys(currentMonthKey);
+      const allImages: Image[] = [];
 
-      const imagesList: Image[] = [];
-      querySnapshot.forEach((doc) => {
-        imagesList.push({
-          id: doc.id,
-          ...(doc.data() as Omit<Image, "id">),
+      for (const monthKey of monthKeys) {
+        const userRef = collection(
+          db,
+          "users",
+          auth.currentUser.uid,
+          "months",
+          monthKey,
+          "images"
+        );
+        const q = query(userRef);
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          allImages.push({
+            id: doc.id,
+            ...(doc.data() as Omit<Image, "id">),
+          });
         });
-      });
+      }
 
-      cacheImages(imagesList);
+      cacheImages(allImages);
 
-      setImages(imagesList);
+      setImages(allImages);
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -92,11 +110,11 @@ export function useMonthlyImages(monthKey: string): UseMonthlyImagesResult {
     });
 
     return () => unsubscribe();
-  }, [auth, monthKey]);
+  }, [auth, currentMonthKey]);
 
   const refetch = () => {
     return fetchImages();
   };
 
-  return { images, status, error, refetch, setImages };
+  return { images, refetch, setImages };
 }

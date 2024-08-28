@@ -15,7 +15,7 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
       style={{
         position: "absolute",
         width: "100%",
-        height: isSmDown ? "49px" : "115px",
+        height: isSmDown ? "59px" : "139px",
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: "cover",
         backgroundPosition: "center",

@@ -8,7 +8,6 @@ import theme from "../theme";
 
 const boxStyle = {
   display: "flex",
-  minHeight: "100vh",
   flex: 1,
 };
 
@@ -30,7 +29,7 @@ const Home = () => {
     <Box
       sx={{
         ...boxStyle,
-        padding: isSmDown ? 2 : 0,
+        padding: isSmDown ? 0.5 : 0,
         marginTop: isSmDown ? 5 : 8,
         justifyContent: "center",
       }}
