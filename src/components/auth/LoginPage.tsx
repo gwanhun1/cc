@@ -4,7 +4,7 @@ import { COLOR } from "../../style/constants";
 import logo from "../../assets/logo.png";
 import useAuthService from "../../hooks/useAuthService";
 import useLoginForm from "../../hooks/useLoginForm";
-import { useMonthlyImages } from "../../hooks/useImageFetch";
+import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { formatYearMonth } from "../../utils/formatYearMonth";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";

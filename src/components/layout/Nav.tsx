@@ -167,7 +167,9 @@ export default function Nav() {
                   icon={item.icon}
                   label={item.label}
                   hasMenu={item.hasMenu}
-                  sx={{ ml: index > 0 ? 1 : 0 }}
+                  sx={{
+                    ml: index > 0 ? 1 : 0,
+                  }}
                   menuItems={
                     index === 1 && user
                       ? [

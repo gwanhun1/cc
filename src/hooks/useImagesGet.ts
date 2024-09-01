@@ -23,7 +23,7 @@ function cacheImages(images: Image[]): void {
 }
 
 // 새로운 유틸리티 함수: 현재 월을 기준으로 이전 1개월을 포함한 2개월의 키를 생성
-function getThreeMonthKeys(currentMonthKey: string): string[] {
+function useImagesGet(currentMonthKey: string): string[] {
   const [year, month] = currentMonthKey.split("-").map(Number);
   const monthKeys: string[] = [];
 
@@ -61,7 +61,7 @@ export function useMonthlyImages(currentMonthKey: string) {
     }
 
     try {
-      const monthKeys = getThreeMonthKeys(currentMonthKey);
+      const monthKeys = useImagesGet(currentMonthKey);
       const allImages: Image[] = [];
 
       for (const monthKey of monthKeys) {

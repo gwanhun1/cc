@@ -6,7 +6,7 @@ import Loading from "./components/common/Loading";
 import { formatYearMonth } from "./utils/formatYearMonth";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "./recoil/atoms";
-import { useMonthlyImages } from "./hooks/useImageFetch";
+import { useMonthlyImages } from "./hooks/useImagesGet";
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);

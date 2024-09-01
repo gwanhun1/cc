@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { FetchStatus, Image } from "../hooks/useImageFetch";
+import { FetchStatus, Image } from "../hooks/useImagesGet";
 
 export type CurrentDate = Date;
 

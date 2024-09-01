@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { formatYearMonth } from "../../utils/formatYearMonth";
-import { useMonthlyImages } from "../../hooks/useImageFetch";
+import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";
 

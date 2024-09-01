@@ -5,20 +5,40 @@ import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import BasicDatePicker from "../../components/common/DatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import { useImageEdit } from "../../hooks/useImageEdit";
 
-interface AddPageProps {
+interface DetailPageProps {
   onClose: () => void;
-  setUpload: React.Dispatch<React.SetStateAction<boolean>>;
+  date: string;
+  title: string;
+  imageUrl: string;
+  imageId: string;
 }
 
-const AddPage = ({ onClose, setUpload }: AddPageProps) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const DetailPage = ({
+  onClose,
+  date: dateParams,
+  title: titleParams,
+  imageUrl: imageUrlParams,
+  imageId: imageIdParams,
+}: DetailPageProps) => {
+  const [selectedImage, setSelectedImage] = useState<string | File | null>(
+    imageUrlParams
+  );
+  const [previewImage, setPreviewImage] = useState<string | File | null>(
+    imageUrlParams
+  );
+  const [title, setTitle] = useState(titleParams);
+  const initialDate =
+    typeof dateParams === "string" ? new Date(dateParams) : dateParams;
 
-  const { uploadImage, status, error } = useImageUpload();
+  const [date, setDate] = useState<Date | null>(initialDate);
+  const [imageId, setImageId] = useState<string>(imageIdParams);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const isImageModified = selectedImage instanceof File;
+
+  const { editImage, status, error } = useImageEdit();
 
   const handleBoxClick = () => {
     if (fileInputRef.current) {
@@ -49,29 +69,28 @@ const AddPage = ({ onClose, setUpload }: AddPageProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (selectedImage && title && date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-
-      const dateString = `${year}-${month}-${day}`;
-
+    if (date && title && imageId) {
       try {
-        await uploadImage({ file: selectedImage, title, date: dateString });
+        const imageData: any = {
+          id: imageId,
+          file: selectedImage instanceof File ? selectedImage : undefined,
+          url: typeof previewImage === "string" ? previewImage : undefined,
+          title,
+          date: typeof date === "string" ? date : date.toISOString(), // Convert to string if it's a Date object
+        };
 
+        await editImage(imageData);
         setSelectedImage(null);
         setPreviewImage(null);
         setTitle("");
         setDate(null);
+        setImageId("");
         onClose();
-        setUpload(true);
-
-        setTimeout(() => {
-          setUpload(false);
-        }, 500);
       } catch (error) {
-        console.error("Image upload failed", error);
+        console.error("Image update failed", error);
       }
+    } else {
+      console.error("Missing data: imageId, title, or date is missing");
     }
   };
 
@@ -80,12 +99,19 @@ const AddPage = ({ onClose, setUpload }: AddPageProps) => {
       <Box display="flex" justifyContent="space-between">
         <Box>
           <Typography variant="h6" color={COLOR.pink} fontWeight="bold">
-            Save Memories
+            Your Memories
           </Typography>
           <Typography variant="subtitle2" color={COLOR.gray}>
-            Upload an image and enter a title
+            Beautiful Memories
           </Typography>
         </Box>
+        {!previewImage && (
+          <Box>
+            <IconButton size="small" onClick={handleDeleteImage}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        )}
       </Box>
       <Box
         sx={{
@@ -132,13 +158,13 @@ const AddPage = ({ onClose, setUpload }: AddPageProps) => {
         variant="contained"
         color="primary"
         fullWidth
-        disabled={!selectedImage || !title || !date || status === "uploading"}
+        disabled={!selectedImage || !title || !date || status === "updating"}
       >
-        {status === "uploading" ? "Uploading..." : "Save"}
+        {status === "updating" ? "Updating..." : "Modify"}
       </Button>
       {error && <Typography color="error">Error: {error}</Typography>}
     </form>
   );
 };
 
-export default AddPage;
+export default DetailPage;
