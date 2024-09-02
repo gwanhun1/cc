@@ -32,34 +32,49 @@ async function processImage(file: File): Promise<Blob> {
 
   return new Promise((resolve, reject) => {
     img.onload = () => {
-      const targetRatio = 56.92 / 50; // 목표 비율 56.92:50
+      const targetRatio = 56.92 / 50; // Target aspect ratio
 
-      // 이미지의 원래 비율
-      const originalRatio = img.width / img.height;
+      // Original image dimensions
+      const { width: originalWidth, height: originalHeight } = img;
 
-      let targetWidth, targetHeight;
+      let cropWidth, cropHeight;
+      let offsetX = 0,
+        offsetY = 0;
 
-      if (originalRatio > targetRatio) {
-        // 이미지가 너무 넓은 경우
-        targetHeight = 260; // 원하는 높이
-        targetWidth = targetHeight * targetRatio;
+      // Determine crop dimensions based on aspect ratio
+      if (originalWidth / originalHeight > targetRatio) {
+        cropWidth = originalHeight * targetRatio;
+        cropHeight = originalHeight;
+        offsetX = (originalWidth - cropWidth) / 2;
       } else {
-        // 이미지가 너무 높은 경우 또는 비율이 동일한 경우
-        targetWidth = 260; // 원하는 폭
-        targetHeight = targetWidth / targetRatio;
+        cropWidth = originalWidth;
+        cropHeight = originalWidth / targetRatio;
+        offsetY = (originalHeight - cropHeight) / 2;
       }
 
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
 
-      ctx?.drawImage(img, 0, 0, targetWidth, targetHeight);
+      // Draw the cropped image
+      ctx?.drawImage(
+        img,
+        offsetX,
+        offsetY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight
+      );
 
+      // Convert canvas to Blob
       canvas.toBlob(
         (blob) => {
           if (blob) {
             resolve(blob);
           } else {
-            reject(new Error("Failed to convert image to WebP"));
+            reject(new Error("Failed to convert image to Blob"));
           }
         },
         "image/webp",

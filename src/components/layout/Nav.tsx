@@ -60,7 +60,7 @@ export default function Nav() {
     { icon: <SearchIcon />, label: "search" },
     { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
     {
-      icon: <FavoriteIcon fontSize="small" />,
+      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 30 }} />,
       label: "favorite",
       badge: daysPassed,
     },
