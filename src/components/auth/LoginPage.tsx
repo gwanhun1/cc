@@ -75,9 +75,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
             CC{" "}
           </span>
           에서는 커플의{" "}
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>사진</span>을
-          멋진{" "}
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>캘린더</span>
+          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>사진</span>을{" "}
+          <br />
+          멋진 <span style={{ color: COLOR.pink }}>캘린더</span>
           로 만들어 드립니다.
           <br />
           매달{" "}
@@ -85,8 +85,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
             사랑하는 사람
           </span>
           과의
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>추억</span>을
-          새로운 디자인으로 만끽하세요.
+          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>
+            <br />
+            추억
+          </span>
+          을 새로운 디자인으로 만끽하세요.
         </Typography>
       </Grid>
       <Grid item xs={12}>
