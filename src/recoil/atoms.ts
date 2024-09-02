@@ -27,3 +27,8 @@ export const errorState = atom<string | null>({
   key: "errorState",
   default: null,
 });
+
+export const loadState = atom<boolean>({
+  key: "loadState",
+  default: false,
+});

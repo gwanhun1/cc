@@ -5,13 +5,16 @@ import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import BasicDatePicker from "../../components/common/DatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import { useRecoilState } from "recoil";
+import { loadState } from "../../recoil/atoms";
 
 interface AddPageProps {
   onClose: () => void;
-  setUpload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddPage = ({ onClose, setUpload }: AddPageProps) => {
+const AddPage = ({ onClose }: AddPageProps) => {
+  const [upload, setUpload] = useRecoilState(loadState);
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [title, setTitle] = useState("");
@@ -38,14 +41,6 @@ const AddPage = ({ onClose, setUpload }: AddPageProps) => {
     }
   };
 
-  const handleDeleteImage = () => {
-    setSelectedImage(null);
-    setPreviewImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -58,7 +53,6 @@ const AddPage = ({ onClose, setUpload }: AddPageProps) => {
 
       try {
         await uploadImage({ file: selectedImage, title, date: dateString });
-
         setSelectedImage(null);
         setPreviewImage(null);
         setTitle("");

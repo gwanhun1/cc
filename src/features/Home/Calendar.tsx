@@ -86,7 +86,7 @@ const Calendar = ({ upload }: { upload: boolean }) => {
         footerToolbar={false}
         editable={false}
         eventClick={handleClickEvent}
-        height={isSmDown ? 500 : 900}
+        height={isSmDown ? 400 : 900}
         locale={koLocale}
         titleFormat={{ year: "numeric", month: "short" }}
         dayHeaders={true}

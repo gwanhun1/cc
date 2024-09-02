@@ -9,15 +9,17 @@ interface EventContentProps {
 
 const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+  console.log(isSmDown);
 
   return (
     <>
-      <div>
+      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <div
           style={{
             position: "absolute",
-            width: "100%",
-            height: isSmDown ? "59px" : "135px",
+            width: isSmDown ? "108%" : "104%",
+            height: isSmDown ? "50px" : "138px",
             backgroundImage: `url(${imageUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",

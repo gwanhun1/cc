@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  // styles.css 또는 당신의 CSS 파일에 추가
   'fc-event': {
     'backgroundColor': 'transparent !important',
     // 배경색 제거

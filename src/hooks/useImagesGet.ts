@@ -5,7 +5,7 @@ import { FirebaseError } from "firebase/app";
 import { useEffect } from "react";
 import { errorState, fetchStatusState, imagesState } from "../recoil/atoms";
 
-type Image = {
+export type Image = {
   id: string;
   imageUrl: string;
   title: string;
@@ -13,7 +13,7 @@ type Image = {
   timestamp: any;
 };
 
-type FetchStatus = "idle" | "loading" | "success" | "error";
+export type FetchStatus = "idle" | "loading" | "success" | "error";
 
 function cacheImages(images: Image[]): void {
   images.forEach((image) => {

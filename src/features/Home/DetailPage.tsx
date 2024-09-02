@@ -6,6 +6,8 @@ import BasicDatePicker from "../../components/common/DatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useImageEdit } from "../../hooks/useImageEdit";
+import { loadState } from "../../recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface DetailPageProps {
   onClose: () => void;
@@ -22,6 +24,8 @@ const DetailPage = ({
   imageUrl: imageUrlParams,
   imageId: imageIdParams,
 }: DetailPageProps) => {
+  const [upload, setUpload] = useRecoilState(loadState);
+
   const [selectedImage, setSelectedImage] = useState<string | File | null>(
     imageUrlParams
   );
@@ -86,6 +90,11 @@ const DetailPage = ({
         setDate(null);
         setImageId("");
         onClose();
+        setUpload(true);
+
+        setTimeout(() => {
+          setUpload(false);
+        }, 500);
       } catch (error) {
         console.error("Image update failed", error);
       }
