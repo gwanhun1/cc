@@ -103,9 +103,15 @@ export default function Nav() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="fixed"
-        sx={{ bgcolor: COLOR.pink, display: "felx", justifyContent: "center" }}
+        sx={{
+          bgcolor: COLOR.pink,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
       >
-        <Toolbar sx={{ width: "85%" }}>
+        <Toolbar sx={{ width: "90%" }}>
           <Box
             sx={{
               ...boxStyle,
@@ -160,7 +166,6 @@ export default function Nav() {
                   { label: "Profile", onClick: handleProfileClick },
                   { label: "Love", onClick: handleLogoutClick },
                 ]}
-                sx={{ padding: "4px" }}
               />
             ) : (
               navItems.map((item, index) => (

@@ -4,10 +4,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc"; // UTC 플러그인 추가
 import { formatYearMonth } from "../../utils/formatYearMonth";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { useRecoilState } from "recoil";
 import { currentDateState } from "../../recoil/atoms";
+
+dayjs.extend(utc); // Dayjs에 UTC 플러그인 적용
 
 interface BasicDatePickerProps {
   value: Date | null;
@@ -30,11 +33,14 @@ export default function BasicDatePicker({
 
   // 이미지가 있는 날짜들을 Set으로 저장
   const disabledDates = React.useMemo(() => {
-    return new Set(images.map((img) => img.date));
+    return new Set(
+      images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD"))
+    ); // UTC 형식으로 변환
   }, [images]);
 
   const shouldDisableDate = (date: Dayjs) => {
-    const dateString = date.format("YYYY-MM-DD"); // Dayjs 객체를 YYYY-MM-DD 형식으로 변환
+    const dateString = date.utc().format("YYYY-MM-DD"); // Dayjs 객체를 UTC로 변환하여 YYYY-MM-DD 형식으로 변환
+
     return disabledDates.has(dateString);
   };
 

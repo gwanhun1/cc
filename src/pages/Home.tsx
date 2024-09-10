@@ -32,6 +32,7 @@ const Home = () => {
         padding: isSmDown ? 0.5 : 0,
         marginTop: isSmDown ? 5 : 8,
         justifyContent: "center",
+        minHeight: "77vh",
       }}
     >
       <Box

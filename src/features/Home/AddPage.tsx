@@ -52,7 +52,11 @@ const AddPage = ({ onClose }: AddPageProps) => {
       const dateString = `${year}-${month}-${day}`;
 
       try {
-        await uploadImage({ file: selectedImage, title, date: dateString });
+        await uploadImage({
+          file: selectedImage,
+          title,
+          date: date.toISOString(),
+        });
         setSelectedImage(null);
         setPreviewImage(null);
         setTitle("");

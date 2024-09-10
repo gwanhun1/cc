@@ -93,7 +93,6 @@ async function processImage(file: File): Promise<Blob> {
 export function useImageUpload(): UseImageUploadResult {
   const [status, setStatus] = useState<UploadStatus>("idle");
   const [error, setError] = useState<string | null>(null);
-
   const storage = getStorage();
   const db = getFirestore();
   const auth = getAuth();
@@ -111,9 +110,12 @@ export function useImageUpload(): UseImageUploadResult {
     const { file, title, date } = imageData;
 
     try {
-      const processedFile = await processImage(file);
+      const processedFile = file;
 
-      const [year, month] = date.split("-").slice(0, 2);
+      // ISO 날짜 문자열에서 년도와 월 추출
+      const dateObj = new Date(date);
+      const year = dateObj.getUTCFullYear();
+      const month = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
       const monthKey = `${year}-${month}`;
 
       const imageRef = ref(
@@ -123,6 +125,7 @@ export function useImageUpload(): UseImageUploadResult {
           ".webp"
         )}`
       );
+
       const snapshot = await uploadBytes(imageRef, processedFile);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
@@ -133,7 +136,7 @@ export function useImageUpload(): UseImageUploadResult {
       await addDoc(imagesCollectionRef, {
         imageUrl: downloadURL,
         title: title,
-        date: date,
+        date: date, // ISO 형식의 날짜 저장
         timestamp: serverTimestamp(),
       });
 

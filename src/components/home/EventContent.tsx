@@ -10,7 +10,6 @@ interface EventContentProps {
 const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
-  console.log(isSmDown);
 
   return (
     <>

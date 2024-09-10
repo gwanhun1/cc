@@ -95,6 +95,7 @@ export function useImageEdit(): UseImageEditResult {
     }
 
     const { id, file, title, date, url } = imageData;
+    console.log(date);
 
     try {
       let downloadURL = url;
@@ -105,7 +106,7 @@ export function useImageEdit(): UseImageEditResult {
       const monthKey = `${year}-${month}`;
 
       if (file) {
-        const processedFile = await processImage(file);
+        const processedFile = await file;
 
         const imageRef = ref(
           storage,
