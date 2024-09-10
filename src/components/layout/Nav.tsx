@@ -101,7 +101,10 @@ export default function Nav() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ bgcolor: COLOR.pink }}>
+      <AppBar
+        position="fixed"
+        sx={{ bgcolor: COLOR.pink, display: "felx", justifyContent: "center" }}
+      >
         <Toolbar sx={{ width: "85%" }}>
           <Box
             sx={{
