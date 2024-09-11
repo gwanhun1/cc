@@ -8,6 +8,7 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 import { useImageEdit } from "../../hooks/useImageEdit";
 import { loadState } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
+import { useImageDelete } from "../../hooks/useImageDelete";
 
 interface DetailPageProps {
   onClose: () => void;
@@ -43,6 +44,11 @@ const DetailPage = ({
   const isImageModified = selectedImage instanceof File;
 
   const { editImage, status, error } = useImageEdit();
+  const {
+    deleteImage,
+    status: deleteStatus,
+    error: deleteError,
+  } = useImageDelete();
 
   const handleBoxClick = () => {
     if (fileInputRef.current) {
@@ -62,11 +68,35 @@ const DetailPage = ({
     }
   };
 
-  const handleDeleteImage = () => {
-    setSelectedImage(null);
-    setPreviewImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleDeleteImage = async () => {
+    if (!imageId || !imageUrlParams) {
+      console.error("No image selected for deletion.");
+      return;
+    }
+
+    try {
+      await deleteImage({
+        imageUrl: imageUrlParams, // Firebase Storage URL
+        date: dateParams, // 해당 이미지가 속한 날짜
+        imageId: imageIdParams, // Firestore 문서의 ID
+      });
+
+      // 상태 업데이트
+      setUpload(true); // 데이터 리로드를 위한 상태 변경
+
+      alert("삭제가 완료되었습니다");
+
+      setTimeout(() => {
+        setSelectedImage(null);
+        setPreviewImage(null);
+        setTitle("");
+        setDate(null);
+        setImageId("");
+        setUpload(false); // 리렌더링 완료
+        onClose(); // 모달 닫기
+      }, 500);
+    } catch (err) {
+      console.error("Error deleting image:", err);
     }
   };
 
@@ -114,13 +144,11 @@ const DetailPage = ({
             Beautiful Memories
           </Typography>
         </Box>
-        {!previewImage && (
-          <Box>
-            <IconButton size="small" onClick={handleDeleteImage}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        )}
+        <Box>
+          <IconButton size="small" onClick={handleDeleteImage}>
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
       </Box>
       <Box
         sx={{
