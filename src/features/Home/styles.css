@@ -54,6 +54,7 @@
 .fc-direction-rtl .fc-daygrid-event.fc-event-start {
   margin-right: 0;
 }
+
 /* 모바일에서 폰트 크기 조정 */
 @media (max-width: 600px) {
   /* 날짜 숫자의 폰트 크기 조정 */

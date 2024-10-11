@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -25,6 +25,7 @@ import {
 } from "../../recoil/atoms";
 import useUserData from "../../hooks/useUserData";
 import { getAuth, signOut } from "firebase/auth";
+import DDayBox from "./DDayBox";
 
 const boxStyle = {
   display: "flex",
@@ -36,13 +37,13 @@ export default function Nav() {
   const setImagesState = useSetRecoilState(imagesState);
   const setFetchStatusState = useSetRecoilState(fetchStatusState);
   const setErrorState = useSetRecoilState(errorState);
-
-  const daysPassed = useDaysPassed(new Date("2024-06-01"));
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const monthYear = `${currentDate.getFullYear()}년 ${
     currentDate.getMonth() + 1
   }월`;
+
+  const [daysPassed, setDaysPassed] = useState(0); // 경과된 날짜 상태
 
   const goToNextMonth = () => {
     const newDate = new Date(currentDate);
@@ -60,9 +61,10 @@ export default function Nav() {
     { icon: <SearchIcon />, label: "search" },
     { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
     {
-      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 30 }} />,
+      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 50 }} />,
       label: "favorite",
       badge: daysPassed,
+      hasMenu: true,
     },
   ];
 
@@ -72,7 +74,6 @@ export default function Nav() {
 
   const handleLogoutClick = async () => {
     const auth = getAuth();
-
     if (window.confirm("정말 로그아웃하시겠습니까? 😢")) {
       try {
         await signOut(auth);
@@ -97,7 +98,7 @@ export default function Nav() {
     }
   };
 
-  const { user, userData, loading } = useUserData();
+  const { user } = useUserData();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -122,7 +123,6 @@ export default function Nav() {
           >
             <img src={logoW} loading="lazy" style={{ width: 30 }} />
           </Box>
-
           <Box
             sx={{
               ...boxStyle,
@@ -146,7 +146,6 @@ export default function Nav() {
               sx={{ marginLeft: 1 }}
             />
           </Box>
-
           <Box
             sx={{
               ...boxStyle,
@@ -187,6 +186,18 @@ export default function Nav() {
                           },
                           { label: "Logout", onClick: handleLogoutClick },
                         ]
+                      : index === 2
+                      ? [
+                          {
+                            label: (
+                              <DDayBox
+                                daysPassed={daysPassed}
+                                setDaysPassed={setDaysPassed}
+                              />
+                            ),
+                            onClick: false,
+                          },
+                        ] // Custom component example
                       : undefined
                   }
                 />
@@ -196,6 +207,5 @@ export default function Nav() {
         </Toolbar>
       </AppBar>
     </Box>
-    // </AppBar>
   );
 }
