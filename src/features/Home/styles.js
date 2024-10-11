@@ -10,5 +10,19 @@ export default StyleSheet.create({
     // 텍스트 색상 유지 (필요시 조정)
     'boxShadow': [{ 'unit': 'string', 'value': 'none' }, { 'unit': 'string', 'value': '!important' }, { 'unit': 'string', 'value': 'none' }, { 'unit': 'string', 'value': '!important' }],
     // 그림자 제거
+  },
+  'fc fc-daygrid-day-frame': {
+    'maxHeight': [{ 'unit': 'px', 'value': 72 }]
+  },
+  'fc fc-daygrid-day-number': {
+    'paddingTop': [{ 'unit': 'px', 'value': 4 }],
+    'paddingRight': [{ 'unit': 'px', 'value': 4 }],
+    'paddingBottom': [{ 'unit': 'px', 'value': 0 }]
+  },
+  'fc-event-start': {
+    'marginTop': [{ 'unit': 'px', 'value': 0 }]
+  },
+  'fc-daygrid-event': {
+    'padding': [{ 'unit': 'px', 'value': 0 }, { 'unit': 'px', 'value': 0 }, { 'unit': 'px', 'value': 0 }, { 'unit': 'px', 'value': 0 }]
   }
 });
