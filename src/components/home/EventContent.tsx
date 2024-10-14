@@ -10,6 +10,7 @@ interface EventContentProps {
 
 const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{
@@ -18,8 +19,8 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
         display: "flex",
         flexDirection: "column",
         backgroundColor: "#d0354e1a",
-        position: "relative", // 추가: 상대 위치 설정
-        overflow: "hidden", // 추가: 오버플로우 숨김
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <Typography
@@ -30,10 +31,14 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
           mb: "2px",
           borderRadius: "0px",
           fontSize: isSmDown ? 6 : 14,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {title}
       </Typography>
+
       <Box
         sx={{
           flexGrow: 1,
@@ -46,8 +51,8 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
           width: "100%",
           cursor: "pointer",
           transition: "all 0.3s ease-in-out",
-          position: "relative", // 추가: 상대 위치 설정
-          zIndex: 1, // 기본 z-index
+          position: "relative",
+          zIndex: 1,
           "@keyframes shake": {
             "0%, 100%": { transform: "translateX(0)" },
             "25%": { transform: "translateX(-5px)" },
@@ -55,7 +60,7 @@ const EventContent: React.FC<EventContentProps> = ({ imageUrl, title }) => {
           },
           "&:hover": {
             animation: "shake 0.5s ease-in-out infinite",
-            zIndex: 100, // 호버 시 z-index 증가
+            zIndex: 100,
           },
         }}
         aria-label={title}
