@@ -12,16 +12,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const token = localStorage.getItem("authToken");
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("authToken"),
+  );
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
   useEffect(() => {
-    if (!token) {
-      openModal();
-    }
-  }, [token]);
+    const checkToken = () => {
+      const storedToken = localStorage.getItem("authToken");
+      setToken(storedToken);
+      if (!storedToken) {
+        openModal();
+      } else {
+        closeModal();
+      }
+    };
+
+    checkToken();
+
+    window.addEventListener("storage", checkToken);
+    return () => {
+      window.removeEventListener("storage", checkToken);
+    };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isOpen, openModal, closeModal }}>

@@ -57,11 +57,7 @@ const CalendarContainer = () => {
           </Button>
         )}
         {isSmDown ? (
-          <IconButton
-            aria-label="delete"
-            size="medium"
-            onClick={() => openModal()}
-          >
+          <IconButton aria-label="delete" size="medium" onClick={handleReset}>
             <RefreshIcon fontSize="inherit" sx={{ color: COLOR.pink }} />
           </IconButton>
         ) : (

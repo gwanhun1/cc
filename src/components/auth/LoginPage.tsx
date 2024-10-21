@@ -42,18 +42,29 @@ const LoginPage = ({ closeModal }: LoginPageProps) => {
       setMode("login");
       alert("🎉 환영합니다 🎉");
     } else if (mode === "login") {
-      await loginUser(login);
-
-      // Wait until the auth state is fully updated
-      const auth = getAuth();
-      if (auth.currentUser) {
-        await refetch();
-      } else {
-        // Optionally handle the case where the user is still not authenticated
-        console.error("User is not authenticated after login.");
+      try {
+        await loginUser(login);
+        const auth = getAuth();
+        if (auth.currentUser) {
+          await refetch();
+          closeModal();
+        } else {
+          alert("회원정보를 다시 확인해주세요.");
+        }
+      } catch (error: any) {
+        if (error.code === "auth/too-many-requests") {
+          alert("잠시 후 다시 시도해 주세요.");
+        } else if (
+          error.code === "auth/invalid-password" ||
+          error.code === "auth/user-not-found"
+        ) {
+          alert("회원정보를 다시 확인해주세요.");
+        } else if (error.response && error.response.status === 400) {
+          alert("잠시 후 다시 시도해 주세요.");
+        } else {
+          alert("회원정보를 다시 확인해주세요.");
+        }
       }
-
-      closeModal();
     }
   };
 

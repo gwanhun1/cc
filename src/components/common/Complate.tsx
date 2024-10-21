@@ -1,9 +1,9 @@
 import React from "react";
 import Lottie from "lottie-react";
 import { Box } from "@mui/material";
-import complate from "./complate.json";
+import complete from "./complete.json";
 
-const Complate = () => {
+const Complete = () => {
   return (
     <Box
       position="absolute"
@@ -15,11 +15,11 @@ const Complate = () => {
       }}
     >
       <Lottie
-        animationData={complate}
+        animationData={complete}
         style={{ width: "650px", height: "650px" }}
       />
     </Box>
   );
 };
 
-export default Complate;
+export default Complete;

@@ -1,14 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Grid, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import useIsMobile from "../hooks/useIsMobile";
 import { COLOR } from "../style/constants";
 
 const Home = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          marginTop: isMobile ? 5 : 0,
+        }}
+      >
         <Grid
           item
           xs={12}
@@ -17,7 +25,12 @@ const Home = () => {
             justifyContent: "center",
           }}
         >
-          <Typography fontWeight={600} variant="h2" letterSpacing={-3}>
+          <Typography
+            fontWeight={600}
+            variant={isMobile ? "h6" : "h2"}
+            letterSpacing={-3}
+            sx={{ fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
+          >
             우리는 무엇을{" "}
             <span
               style={{
@@ -39,10 +52,14 @@ const Home = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            marginBottom: 5,
+            marginBottom: isMobile ? 2 : 5,
           }}
         >
-          <Typography variant="h6" color={COLOR.darkgray}>
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            fontSize={isMobile ? 10 : 20}
+            color={COLOR.darkgray}
+          >
             CC와 함께 일정을 정리하고 소중한 추억을 캘린더에 담아보세요.
           </Typography>
         </Grid>
