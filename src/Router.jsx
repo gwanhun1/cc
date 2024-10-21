@@ -10,9 +10,9 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/todoList" element={<TodoListContainer />} />
         <Route element={<AuthGuard />}>
           <Route path="/calendar" element={<CalendarContainer />} />
-          <Route path="/todoList" element={<TodoListContainer />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -51,18 +51,9 @@ export const TodoListContainer = () => {
     );
   };
 
-  const handleEdit = () => {
-    console.log("Edit mode");
-    // Edit 모드 구현
-  };
-
   return (
     <Box sx={{ bgcolor: "background.default", minHeight: "100vh", py: 4 }}>
-      <TodoTemplate
-        todos={todos}
-        onToggleTodo={handleToggleTodo}
-        onEdit={handleEdit}
-      />
+      <TodoTemplate todos={todos} onToggleTodo={handleToggleTodo} />
     </Box>
   );
 };

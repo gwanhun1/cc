@@ -140,7 +140,8 @@ export default function Nav() {
               flexGrow: 2,
             }}
           >
-            {window.location.pathname.includes("calendar") && (
+            {(window.location.pathname.includes("calendar") ||
+              window.location.pathname.includes("todoList")) && (
               <>
                 <NavProfileButton
                   icon={<KeyboardArrowLeftIcon />}

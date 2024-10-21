@@ -32,7 +32,7 @@ export default function BasicDatePicker({
     formatYearMonth(currentDate),
   );
 
-  // 이미지가 있는 날짜들을 Set으로 저장sss
+  // 이미지가 있는 날짜들을 Set으로 저장
   const disabledDates = React.useMemo(() => {
     return new Set(
       images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD")),
