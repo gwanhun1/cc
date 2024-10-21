@@ -112,8 +112,8 @@ export default function Nav() {
           bgcolor: COLOR.pink,
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
           width: "100%",
+          alignItems: "center",
         }}
       >
         <Toolbar sx={{ width: "90%" }}>
