@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { formatDate } from "./dateformat";
+import { DateFormatHandler } from "./DateFormatHandler";
 import { TodoCheckbox } from "./TodoCheckBox";
 
 interface TodoItemProps {
@@ -41,7 +41,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           fontSize: "0.875rem",
         }}
       >
-        {formatDate(dueDate)}
+        {DateFormatHandler(dueDate)}
       </Typography>
     </Box>
   </Box>
