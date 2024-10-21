@@ -1,8 +1,8 @@
-import { getStorage, ref, deleteObject } from "firebase/storage";
-import { getFirestore, doc, deleteDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 import { useState } from "react";
+import { FirebaseError } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { deleteDoc, doc, getFirestore } from "firebase/firestore";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 
 type DeleteImageData = {
   imageUrl: string; // 이미지의 Firebase Storage URL

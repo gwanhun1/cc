@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { FirebaseError } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 import { auth } from "../firebase";
 
 interface LoginState {
@@ -21,7 +21,7 @@ const useAuthService = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         login.id,
-        login.password
+        login.password,
       );
       const user = userCredential.user;
       if (login.name) {
@@ -39,7 +39,7 @@ const useAuthService = () => {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         login.id,
-        login.password
+        login.password,
       );
       const user = userCredential.user;
       const token = await user.getIdToken();

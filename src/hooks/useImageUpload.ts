@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { FirebaseError } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import {
-  getFirestore,
-  doc,
-  collection,
   addDoc,
+  collection,
+  doc,
+  getFirestore,
   serverTimestamp,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 type ImageData = {
   file: File;
@@ -65,7 +65,7 @@ async function processImage(file: File): Promise<Blob> {
         0,
         0,
         cropWidth,
-        cropHeight
+        cropHeight,
       );
 
       // Convert canvas to Blob
@@ -78,7 +78,7 @@ async function processImage(file: File): Promise<Blob> {
           }
         },
         "image/webp",
-        1.0
+        1.0,
       );
     };
 
@@ -122,8 +122,8 @@ export function useImageUpload(): UseImageUploadResult {
         storage,
         `${auth.currentUser.uid}/${monthKey}/${file.name.replace(
           /\.[^/.]+$/,
-          ".webp"
-        )}`
+          ".webp",
+        )}`,
       );
 
       const snapshot = await uploadBytes(imageRef, processedFile);

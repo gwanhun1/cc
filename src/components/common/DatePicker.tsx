@@ -1,14 +1,15 @@
 import * as React from "react";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import utc from "dayjs/plugin/utc"; // UTC 플러그인 추가
-import { formatYearMonth } from "../../utils/formatYearMonth";
-import { useMonthlyImages } from "../../hooks/useImagesGet";
+import utc from "dayjs/plugin/utc";
 import { useRecoilState } from "recoil";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { currentDateState } from "../../recoil/atoms";
+// UTC 플러그인 추가
+import { formatYearMonth } from "../../utils/formatYearMonth";
 
 dayjs.extend(utc); // Dayjs에 UTC 플러그인 적용
 
@@ -28,13 +29,13 @@ export default function BasicDatePicker({
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
 
   const { images, status, refetch } = useMonthlyImages(
-    formatYearMonth(currentDate)
+    formatYearMonth(currentDate),
   );
 
   // 이미지가 있는 날짜들을 Set으로 저장sss
   const disabledDates = React.useMemo(() => {
     return new Set(
-      images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD"))
+      images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD")),
     ); // UTC 형식으로 변환
   }, [images]);
 

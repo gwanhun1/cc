@@ -1,12 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { COLOR } from "../../style/constants";
-import { useNavMenu } from "../../hooks/useNavMenu";
+import Typography from "@mui/material/Typography";
 import { SxProps, Theme } from "@mui/system";
+import { useNavMenu } from "../../hooks/useNavMenu";
+import { COLOR } from "../../style/constants";
 
 interface MenuItemProps {
   label: string | React.ReactNode; // label의 타입을 수정
@@ -22,7 +22,7 @@ interface NavProfileButtonProps {
   sx?: SxProps<Theme>;
 }
 
-const NavProfileButton: React.FC<NavProfileButtonProps> = ({
+const NavProfileButton = ({
   icon,
   label,
   badge,
@@ -30,7 +30,7 @@ const NavProfileButton: React.FC<NavProfileButtonProps> = ({
   menuItems = [],
   sx,
   ...props
-}) => {
+}: NavProfileButtonProps) => {
   const { anchorEl, isOpen, handleOpenMenu, handleCloseMenu } = useNavMenu();
 
   return (

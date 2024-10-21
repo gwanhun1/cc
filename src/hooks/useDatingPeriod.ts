@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useDaysPassed = (date: Date): number => {
   const [daysPassed, setDaysPassed] = useState<number>(0);

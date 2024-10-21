@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Box, ModalProps, Stack, Button } from "@mui/material";
+import { Box, Button, Modal, ModalProps, Stack } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
 import CustomBackdrop from "./CustomBackdrop";
 
@@ -29,7 +29,7 @@ const modalSizes = {
   },
 };
 
-const CustomModal: React.FC<CustomModalProps> = ({
+const CustomModal = ({
   isOpen,
   onClose,
   onConfirm,
@@ -37,7 +37,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   width = "md",
   height = "md",
   ...modalProps
-}) => {
+}: CustomModalProps) => {
   const modalStyles: SxProps<Theme> = {
     position: "absolute",
     top: "50%",

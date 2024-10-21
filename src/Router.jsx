@@ -1,5 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CalendarContainer from "./features/Calendar/CalendarContainer";
+import { TodoListContainer } from "./features/TodoList/TodoListContainer";
 import Home from "./pages/Home";
 
 export const Router = () => {
@@ -7,6 +9,8 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/calendar" element={<CalendarContainer />} />
+        <Route path="/todoList" element={<TodoListContainer />} />
       </Routes>
     </BrowserRouter>
   );

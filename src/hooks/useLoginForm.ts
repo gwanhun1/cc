@@ -23,7 +23,7 @@ const useLoginForm = (initialMode: "login" | "signUp") => {
   };
 
   const handleModeChange = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     setMode((prevMode) => (prevMode === "login" ? "signUp" : "login"));
   };

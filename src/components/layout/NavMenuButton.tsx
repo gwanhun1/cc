@@ -1,10 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import { COLOR } from "../../style/constants";
+import Typography from "@mui/material/Typography";
 import { useNavMenu } from "../../hooks/useNavMenu";
+import { COLOR } from "../../style/constants";
 
 const NavMenuButton = ({ icon, label, badge, hasMenu, children, ...props }) => {
   const { anchorEl, isOpen, handleOpenMenu, handleCloseMenu } = useNavMenu();
@@ -44,7 +44,7 @@ const NavMenuButton = ({ icon, label, badge, hasMenu, children, ...props }) => {
                 if (child.props.onClick) child.props.onClick(event);
                 handleCloseMenu();
               },
-            })
+            }),
           )}
         </Menu>
       )}

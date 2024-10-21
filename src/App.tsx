@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Router } from "./Router";
-import Nav from "./components/layout/Nav";
-import Footer from "./components/layout/Footer";
-import Loading from "./components/common/Loading";
-import { formatYearMonth } from "./utils/formatYearMonth";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { currentDateState } from "./recoil/atoms";
+import Loading from "./components/common/Loading";
+import Footer from "./components/layout/Footer";
+import Nav from "./components/layout/Nav";
 import { useMonthlyImages } from "./hooks/useImagesGet";
+import Layout from "./layout/layout";
+import { currentDateState } from "./recoil/atoms";
+import { Router } from "./Router";
+import { formatYearMonth } from "./utils/formatYearMonth";
 
-const App: React.FC = () => {
+const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const token = localStorage.getItem("authToken");
@@ -34,7 +35,9 @@ const App: React.FC = () => {
   return (
     <>
       <Nav />
-      <Router />
+      <Layout>
+        <Router />
+      </Layout>
       <Footer />
     </>
   );

@@ -1,55 +1,119 @@
-import { Box, useMediaQuery } from "@mui/material";
-import React, { useEffect } from "react";
-import { useModal } from "../hooks/useModal";
-import LoginPage from "../components/auth/LoginPage";
-import CustomModal from "../components/common/CustomModal";
-import CalendarContainer from "../features/Home/CalendarContainer";
-import theme from "../theme";
-
-const boxStyle = {
-  display: "flex",
-  flex: 1,
-};
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Grid, Typography, useMediaQuery } from "@mui/material";
+import { COLOR } from "../style/constants";
 
 const Home = () => {
-  const { isOpen, openModal, closeModal } = useModal();
-  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const token = localStorage.getItem("authToken");
-
-  useEffect(() => {
-    if (token) {
-      return;
-    } else {
-      openModal();
-    }
-  }, [token]);
+  const navigate = useNavigate();
 
   return (
-    <Box
-      sx={{
-        ...boxStyle,
-        padding: isSmDown ? 0.5 : 0,
-        marginTop: isSmDown ? 2.5 : 8,
-        justifyContent: "center",
-        minHeight: "77vh",
-      }}
-    >
-      <Box
-        sx={{
-          ...boxStyle,
-          marginTop: 5,
-          marginBottom: isSmDown ? 5 : 8,
-          justifyContent: "center",
-          maxWidth: "999px",
-        }}
-      >
-        <CalendarContainer />
-      </Box>
-      <CustomModal isOpen={isOpen} width="sm" height="lg">
-        <LoginPage closeModal={closeModal} />
-      </CustomModal>
-    </Box>
+    <>
+      <Grid container spacing={4}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Typography fontWeight={600} variant="h2" letterSpacing={-3}>
+            우리는 무엇을{" "}
+            <span
+              style={{
+                background: `linear-gradient(70deg,#ff5576 30%, #e63d5f 60%, #cf364d 90%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              함께
+            </span>{" "}
+            만들까요?
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: 5,
+          }}
+        >
+          <Typography variant="h6" color={COLOR.darkgray}>
+            CC와 함께 일정을 정리하고 소중한 추억을 캘린더에 담아보세요.
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+            }}
+          >
+            <Button
+              fullWidth
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#ffffff",
+                borderRadius: "8px",
+                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#f0f0f0",
+                  boxShadow: "0 12px 24px rgba(0, 0, 0, 0.4)",
+                  transform: "translateY(-4px)",
+                },
+              }}
+              onClick={() => navigate("/todoList")}
+            >
+              TODOLIST
+            </Button>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+            }}
+          >
+            <Button
+              fullWidth
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#ffffff",
+                borderRadius: "8px",
+                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#f0f0f0",
+                  boxShadow: "0 12px 24px rgba(0, 0, 0, 0.4)",
+                  transform: "translateY(-4px)",
+                },
+              }}
+              onClick={() => navigate("/calendar")}
+            >
+              CALENDAR
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 

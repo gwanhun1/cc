@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-
-const auth = getAuth();
-const db = getFirestore();
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 function useUserData() {
   const [user, setUser] = useState(null);
@@ -24,7 +22,7 @@ function useUserData() {
               setUserData(null);
             }
           } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error("사용자 데이터 가져오기 오류:", error);
             setUserData(null);
           } finally {
             setLoading(false);

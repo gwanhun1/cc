@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,8 +10,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { COLOR } from "../../style/constants";
-import useDaysPassed from "../../hooks/useDatingPeriod";
-import NavProfileButton from "./NavProfileButton";
 import { useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import logoW from "../../assets/logoW.png";
@@ -26,6 +24,7 @@ import {
 import useUserData from "../../hooks/useUserData";
 import { getAuth, signOut } from "firebase/auth";
 import DDayBox from "./DDayBox";
+import NavProfileButton from "./NavProfileButton";
 
 const boxStyle = {
   display: "flex",
@@ -44,6 +43,11 @@ export default function Nav() {
   }월`;
 
   const [daysPassed, setDaysPassed] = useState(0); // 경과된 날짜 상태
+  console.log(currentDate);
+
+  useEffect(() => {
+    setCurrentDate(new Date(currentDate));
+  }, []);
 
   const goToNextMonth = () => {
     const newDate = new Date(currentDate);

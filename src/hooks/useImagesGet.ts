@@ -1,8 +1,8 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { getFirestore, collection, query, getDocs } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 import { useEffect } from "react";
+import { FirebaseError } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, getFirestore, query } from "firebase/firestore";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { errorState, fetchStatusState, imagesState } from "../recoil/atoms";
 
 export type Image = {
@@ -71,7 +71,7 @@ export function useMonthlyImages(currentMonthKey: string) {
           auth.currentUser.uid,
           "months",
           monthKey,
-          "images"
+          "images",
         );
         const q = query(userRef);
         const querySnapshot = await getDocs(q);

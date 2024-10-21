@@ -1,6 +1,6 @@
-import { Box } from "@mui/material";
-import Lottie from "lottie-react";
 import React from "react";
+import Lottie from "lottie-react";
+import { Box } from "@mui/material";
 import complate from "./complate.json";
 
 const Complate = () => {

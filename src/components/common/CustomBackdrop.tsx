@@ -7,7 +7,7 @@ const backdropStyles: SxProps<Theme> = {
   backgroundColor: "transparent",
 };
 
-const CustomBackdrop: React.FC<BackdropProps> = (props) => {
+const CustomBackdrop = (props: BackdropProps) => {
   return <Backdrop sx={backdropStyles} {...props} />;
 };
 

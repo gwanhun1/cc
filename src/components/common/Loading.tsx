@@ -1,6 +1,6 @@
-import { Box } from "@mui/material";
-import Lottie from "lottie-react";
 import React, { useEffect, useState } from "react";
+import Lottie from "lottie-react";
+import { Box } from "@mui/material";
 import love from "./love.json";
 
 const Loading = () => {

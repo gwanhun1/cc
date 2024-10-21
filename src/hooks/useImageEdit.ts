@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import {
-  getFirestore,
-  doc,
-  updateDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {
+  doc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 type ImageData = {
   id: string;
@@ -64,7 +64,7 @@ async function processImage(file: File): Promise<Blob> {
           }
         },
         "image/webp",
-        1.0
+        1.0,
       );
     };
 
@@ -112,8 +112,8 @@ export function useImageEdit(): UseImageEditResult {
           storage,
           `${auth.currentUser.uid}/${monthKey}/${file.name.replace(
             /\.[^/.]+$/,
-            ".webp"
-          )}`
+            ".webp",
+          )}`,
         );
         const snapshot = await uploadBytes(imageRef, processedFile);
         downloadURL = await getDownloadURL(snapshot.ref);
@@ -130,7 +130,7 @@ export function useImageEdit(): UseImageEditResult {
         "months",
         monthKey,
         "images",
-        id
+        id,
       );
 
       const updateData: any = {

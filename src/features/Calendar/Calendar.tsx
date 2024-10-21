@@ -1,19 +1,19 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import FullCalendar from "@fullcalendar/react";
+import React, { useEffect, useRef, useState } from "react";
+import koLocale from "@fullcalendar/core/locales/ko";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import koLocale from "@fullcalendar/core/locales/ko";
+import FullCalendar from "@fullcalendar/react";
+import { useRecoilState } from "recoil";
 import { Box, useMediaQuery } from "@mui/material";
-import { currentDateState } from "../../recoil/atoms";
-import theme from "../../theme";
-import "./styles.css";
+import CustomModal from "../../components/common/CustomModal";
 import EventContent from "../../components/home/EventContent";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
-import { formatYearMonth } from "../../utils/formatYearMonth";
-import CustomModal from "../../components/common/CustomModal";
-import DetailPage from "./DetailPage";
 import { useModal } from "../../hooks/useModal";
+import { currentDateState } from "../../recoil/atoms";
+import theme from "../../theme";
+import { formatYearMonth } from "../../utils/formatYearMonth";
+import DetailPage from "./DetailPage";
+import "./styles.css";
 
 const renderEventContent = (eventInfo: {
   backgroundColor?: string;
@@ -61,12 +61,12 @@ const Calendar = ({ upload }: { upload: boolean }) => {
     const start = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
-      1
+      1,
     );
     const end = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
-      0
+      0,
     );
     return { start, end };
   };

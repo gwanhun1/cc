@@ -1,21 +1,21 @@
 import React from "react";
+import { getAuth } from "firebase/auth";
+import { useRecoilState } from "recoil";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import { COLOR } from "../../style/constants";
 import logo from "../../assets/logo.png";
 import useAuthService from "../../hooks/useAuthService";
-import useLoginForm from "../../hooks/useLoginForm";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
-import { formatYearMonth } from "../../utils/formatYearMonth";
-import { useRecoilState } from "recoil";
+import useLoginForm from "../../hooks/useLoginForm";
 import { currentDateState } from "../../recoil/atoms";
+import { COLOR } from "../../style/constants";
+import { formatYearMonth } from "../../utils/formatYearMonth";
 import Loading from "../common/Loading";
-import { getAuth } from "firebase/auth";
 
 interface LoginPageProps {
   closeModal: () => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ closeModal }) => {
+const LoginPage = ({ closeModal }: LoginPageProps) => {
   const {
     mode,
     setMode,

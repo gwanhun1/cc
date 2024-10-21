@@ -1,14 +1,14 @@
-import { Box, IconButton, TextField, Typography, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { COLOR } from "../../style/constants";
-import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import BasicDatePicker from "../../components/common/DatePicker";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useImageUpload } from "../../hooks/useImageUpload";
-import { useImageEdit } from "../../hooks/useImageEdit";
-import { loadState } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import BasicDatePicker from "../../components/common/DatePicker";
 import { useImageDelete } from "../../hooks/useImageDelete";
+import { useImageEdit } from "../../hooks/useImageEdit";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { loadState } from "../../recoil/atoms";
+import { COLOR } from "../../style/constants";
 
 interface DetailPageProps {
   onClose: () => void;
@@ -28,10 +28,10 @@ const DetailPage = ({
   const [upload, setUpload] = useRecoilState(loadState);
 
   const [selectedImage, setSelectedImage] = useState<string | File | null>(
-    imageUrlParams
+    imageUrlParams,
   );
   const [previewImage, setPreviewImage] = useState<string | File | null>(
-    imageUrlParams
+    imageUrlParams,
   );
   const [title, setTitle] = useState(titleParams);
   const initialDate =
