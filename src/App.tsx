@@ -9,6 +9,8 @@ import { currentDateState } from "./recoil/atoms";
 import { Router } from "./Router";
 import { formatYearMonth } from "./utils/formatYearMonth";
 
+// 추가
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
@@ -21,7 +23,6 @@ const App = () => {
       }
       setIsLoading(false);
     };
-
     checkToken();
   }, [token]);
 

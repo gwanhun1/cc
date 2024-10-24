@@ -128,6 +128,7 @@ export default function Nav() {
               justifyContent: "flex-start",
               flexGrow: 1,
               flexBasis: 0,
+              cursor: "pointer",
             }}
             onClick={goToHome}
           >

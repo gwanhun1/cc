@@ -4,7 +4,7 @@ export const TodoCheckbox = styled(Checkbox)({
   color: "#CCCCCC",
   padding: "6px",
   "&.Mui-checked": {
-    color: "#E17055",
+    color: "#cf364d",
   },
   "& .MuiSvgIcon-root": {
     fontSize: 20,

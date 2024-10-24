@@ -6,14 +6,16 @@ const StyledFab = styled(Fab)({
   position: "absolute",
   bottom: 24,
   right: 24,
-  backgroundColor: "#E17055",
+  backgroundColor: "#cf364d",
   "&:hover": {
-    backgroundColor: "#D15045",
+    backgroundColor: "#e4203d",
   },
 });
 
-export const AddButton = () => (
-  <StyledFab color="primary" aria-label="add">
+type AddButtonProps = { setEdit: any };
+
+export const AddButton = ({ setEdit }: AddButtonProps) => (
+  <StyledFab color="primary" aria-label="add" onClick={() => setEdit(true)}>
     <AddIcon />
   </StyledFab>
 );

@@ -20,7 +20,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     sx={{
       display: "flex",
       alignItems: "start",
-      py: 1.5,
+      py: 1,
     }}
   >
     <TodoCheckbox checked={completed} onChange={onToggle} />

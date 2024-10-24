@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useRecoilState } from "recoil";
@@ -33,7 +33,7 @@ export default function BasicDatePicker({
   );
 
   // 이미지가 있는 날짜들을 Set으로 저장
-  const disabledDates = React.useMemo(() => {
+  const disabledDates = useMemo(() => {
     return new Set(
       images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD")),
     ); // UTC 형식으로 변환
@@ -56,6 +56,7 @@ export default function BasicDatePicker({
           value={value ? dayjs(value) : null}
           onChange={handleDateChange}
           shouldDisableDate={shouldDisableDate}
+          maxDate={dayjs()}
         />
       </DemoContainer>
     </LocalizationProvider>

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { Box, Button, Collapse, Typography } from "@mui/material";
+import useIsMobile from "../../hooks/useIsMobile";
 import { currentDateState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
+import { AddButton } from "./AddButton";
 import EditPage from "./EditPage";
 
 interface TodoHeaderProps {
@@ -15,6 +17,7 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count }) => {
   const dateObject = new Date(currentDate);
   const options = { month: "long" }; // 'long' 형식으로 설정
   const monthName = dateObject.toLocaleString("en-US", options).toUpperCase();
+  const isMobile = useIsMobile();
 
   const handleEdit = () => {
     setEdit((prev) => !prev);
@@ -27,34 +30,30 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 3,
-          mt: 2,
+          mb: isMobile ? 0 : 3,
+          mt: isMobile ? 4 : 2,
         }}
       >
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            To Do (<span style={{ color: COLOR.hotpink }}>{count}</span>)
-          </Typography>
-          <Typography variant="subtitle1" color={COLOR.pink} fontWeight={800}>
-            {monthName}
-          </Typography>
-        </Box>
-        <Button
-          sx={{
-            color: "#999",
-            minWidth: "auto",
-            textTransform: "none",
-            fontSize: "1rem",
-          }}
-          onClick={handleEdit}
+        <Typography
+          variant={isMobile ? "body1" : "h6"}
+          sx={{ fontWeight: "bold" }}
         >
-          Edit
-        </Button>
+          To Do (<span style={{ color: COLOR.hotpink }}>{count}</span>)
+        </Typography>
+        <Typography
+          variant={isMobile ? "subtitle1" : "h5"}
+          color={COLOR.pink}
+          fontWeight={800}
+          p={1}
+          sx={{ textDecoration: "underline" }}
+        >
+          {monthName}
+        </Typography>
       </Box>
-      {/* Collapse 컴포넌트를 사용하여 자연스럽게 나타나게 함 */}
       <Collapse in={edit} timeout="auto" unmountOnExit>
-        <EditPage />
+        <EditPage setEdit={setEdit} />
       </Collapse>
+      <AddButton setEdit={setEdit} />
     </>
   );
 };
