@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import useIsMobile from "../../hooks/useIsMobile";
+import { useTodoUpload } from "../../hooks/useTodoUpload";
 
 type EditPageProps = { setEdit: any };
 
@@ -26,9 +27,27 @@ const EditPage = ({ setEdit }: EditPageProps) => {
   const handleCancel = () => {
     setEdit(false);
   };
-  const handleSave = () => {
-    setEdit(false);
+
+  //일정 등록
+  const { uploadTodoItem, status, error } = useTodoUpload();
+
+  const handleSave = async () => {
+    if ((memo && memo.length > 0) || date !== null) {
+      await uploadTodoItem({
+        text: memo,
+        dueDate: date ? date.toDate() : null,
+      });
+    } else {
+      alert("빠진 곳이 있습니다.");
+    }
   };
+
+  //모달 닫기
+  useEffect(() => {
+    if (status === "success") {
+      setEdit(false);
+    }
+  }, [status, setEdit]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -60,6 +79,10 @@ const EditPage = ({ setEdit }: EditPageProps) => {
           onChange={handleChange}
           size="small"
         />
+
+        {status === "uploading" && <p>업로드 중...</p>}
+        {status === "success" && <p>할 일이 추가되었습니다!</p>}
+        {status === "error" && <p>오류: {error}</p>}
         <Box width="100%" textAlign="end" marginTop={2}>
           <Button
             variant="outlined"
