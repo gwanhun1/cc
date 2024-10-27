@@ -28,9 +28,7 @@ export default function BasicDatePicker({
 
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
 
-  const { images, status, refetch } = useMonthlyImages(
-    formatYearMonth(currentDate),
-  );
+  const { images, refetch } = useMonthlyImages(formatYearMonth(currentDate));
 
   // 이미지가 있는 날짜들을 Set으로 저장
   const disabledDates = useMemo(() => {

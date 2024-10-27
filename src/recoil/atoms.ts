@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { FetchStatus, Image } from "../hooks/useImagesGet";
+import { TodoItemType } from "../hooks/useTodoGet";
 
 export type CurrentDate = Date;
 
@@ -15,6 +16,11 @@ export const loginState = atom({
 
 export const imagesState = atom<Image[]>({
   key: "imagesState",
+  default: [],
+});
+
+export const todosState = atom<TodoItemType[]>({
+  key: "todosState",
   default: [],
 });
 

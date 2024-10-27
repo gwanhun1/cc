@@ -9,9 +9,10 @@ import EditPage from "./EditPage";
 
 interface TodoHeaderProps {
   count: number;
+  refetch: any;
 }
 
-export const TodoHeader: React.FC<TodoHeaderProps> = ({ count }) => {
+export const TodoHeader: React.FC<TodoHeaderProps> = ({ count, refetch }) => {
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const [edit, setEdit] = useState(false);
   const dateObject = new Date(currentDate);
@@ -51,7 +52,7 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count }) => {
         </Typography>
       </Box>
       <Collapse in={edit} timeout="auto" unmountOnExit>
-        <EditPage setEdit={setEdit} />
+        <EditPage setEdit={setEdit} refetch={refetch} />
       </Collapse>
       <AddButton setEdit={setEdit} />
     </>

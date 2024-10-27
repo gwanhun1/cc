@@ -52,7 +52,6 @@ const Calendar = ({ upload }: { upload: boolean }) => {
   }, [currentDate]);
 
   const { images, refetch } = useMonthlyImages(formatYearMonth(currentDate));
-  console.log(images);
 
   useEffect(() => {
     refetch();

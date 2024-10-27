@@ -1,86 +1,51 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { Box } from "@mui/material";
 import { AuthGuard } from "../../components/auth/authGuard";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
 import useIsMobile from "../../hooks/useIsMobile";
+import { useMonthlyTodos } from "../../hooks/useTodoGet";
+import { useUpdateTodo } from "../../hooks/useUpdateTodo";
 import { currentDateState } from "../../recoil/atoms";
 import { formatYearMonth } from "../../utils/formatYearMonth";
 import { TodoTemplate } from "./TodoTemplate";
 
-export interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-  dueDate: Date;
-}
-
 export const TodoListContainer = () => {
   const isMobile = useIsMobile();
-  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
-  const { images, refetch } = useMonthlyImages(formatYearMonth(currentDate));
-
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      id: 1,
-      text: "Buy a new yoga mat",
-      completed: false,
-      dueDate: new Date(),
-    },
-    {
-      id: 2,
-      text: "Send a birthday card to Charlie",
-      completed: false,
-      dueDate: new Date(),
-    },
-    {
-      id: 3,
-      text: "Sign up for a new fitness class",
-      completed: false,
-      dueDate: new Date(Date.now() + 86400000),
-    },
-    {
-      id: 4,
-      text: "Read 3 chapters of Atomic Habits",
-      completed: false,
-      dueDate: new Date(Date.now() + 86400000),
-    },
-    {
-      id: 5,
-      text: "Prepare for the presentation on project X",
-      completed: false,
-      dueDate: new Date("2024-10-12T00:00:00"),
-    },
-    {
-      id: 6,
-      text: "Grocery shopping for the week",
-      completed: false,
-      dueDate: new Date("2024-10-15T00:00:00"),
-    },
-  ]);
+  const [currentDate] = useRecoilState(currentDateState);
+  const { images } = useMonthlyImages(formatYearMonth(currentDate));
+  const { todos, setTodos, refetch } = useMonthlyTodos(
+    formatYearMonth(currentDate),
+  );
+  const { updateTodoInFirebase } = useUpdateTodo();
 
   useEffect(() => {
-    const areSameDay = (first: Date, second: Date) => {
+    const isSameDate = (dueDate, imageDate) => {
+      const dueDateObj = new Date(dueDate);
+      const imageDateObj = new Date(imageDate);
+
       return (
-        first.getFullYear() === second.getFullYear() &&
-        first.getMonth() === second.getMonth() &&
-        first.getDate() === second.getDate()
+        dueDateObj.getUTCFullYear() === imageDateObj.getUTCFullYear() &&
+        dueDateObj.getUTCMonth() === imageDateObj.getUTCMonth() &&
+        dueDateObj.getUTCDate() === imageDateObj.getUTCDate()
       );
     };
 
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => ({
-        ...todo,
-        completed:
-          images.some((image) =>
-            areSameDay(new Date(image.date), todo.dueDate),
-          ) || todo.completed,
-      })),
-    );
-  }, [images]);
+    const updatedTodos = todos.map((todo) => {
+      const isCompleted = images.some((image) =>
+        isSameDate(todo.date, image.date),
+      );
+      // Firebase 업데이트 호출
+      updateTodoInFirebase(todo.id, { completed: isCompleted });
+      return { ...todo, completed: isCompleted };
+    });
 
-  const handleToggleTodo = (id: number) => {
+    if (JSON.stringify(updatedTodos) !== JSON.stringify(todos)) {
+      setTodos(updatedTodos);
+    }
+  }, [images, updateTodoInFirebase, todos, setTodos]);
+
+  const handleToggleTodo = (id) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
@@ -91,7 +56,11 @@ export const TodoListContainer = () => {
   return (
     <AuthGuard>
       <Box sx={{ bgcolor: "background.default", minHeight: "100vh" }}>
-        <TodoTemplate todos={todos} onToggleTodo={handleToggleTodo} />
+        <TodoTemplate
+          todos={todos}
+          onToggleTodo={handleToggleTodo}
+          refetch={refetch}
+        />
       </Box>
     </AuthGuard>
   );

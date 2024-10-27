@@ -7,9 +7,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import useIsMobile from "../../hooks/useIsMobile";
 import { useTodoUpload } from "../../hooks/useTodoUpload";
 
-type EditPageProps = { setEdit: any };
+type EditPageProps = { setEdit: any; refetch: any };
 
-const EditPage = ({ setEdit }: EditPageProps) => {
+const EditPage = ({ setEdit, refetch }: EditPageProps) => {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Dayjs | null | undefined>(null);
   const [memo, setMemo] = useState<string | null>(null);
@@ -33,10 +33,16 @@ const EditPage = ({ setEdit }: EditPageProps) => {
 
   const handleSave = async () => {
     if ((memo && memo.length > 0) || date !== null) {
-      await uploadTodoItem({
-        text: memo,
-        dueDate: date ? date.toDate() : null,
-      });
+      try {
+        await uploadTodoItem({
+          text: memo,
+          date: date ? date.toDate() : null,
+        });
+        refetch();
+      } catch (error) {
+        console.error("업로드 실패:", error);
+        alert("업로드에 실패했습니다.");
+      }
     } else {
       alert("빠진 곳이 있습니다.");
     }

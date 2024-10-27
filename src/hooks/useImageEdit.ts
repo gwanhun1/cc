@@ -95,7 +95,6 @@ export function useImageEdit(): UseImageEditResult {
     }
 
     const { id, file, title, date, url } = imageData;
-    console.log(date);
 
     try {
       let downloadURL = url;

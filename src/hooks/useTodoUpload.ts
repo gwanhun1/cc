@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Dayjs } from "dayjs";
 import { FirebaseError } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import {
@@ -12,7 +11,7 @@ import {
 
 type TodoItemInput = {
   text: string | null;
-  dueDate: Date | null;
+  date: Date | null;
 };
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
@@ -44,16 +43,34 @@ export function useTodoUpload(): UseTodoUploadResult {
       const year = date.getUTCFullYear();
       const month = String(date.getUTCMonth() + 1).padStart(2, "0");
       const monthKey = `${year}-${month}`;
-
       const userRef = doc(db, "users", auth.currentUser.uid);
       const monthRef = doc(userRef, "months", monthKey);
       const todosCollectionRef = collection(monthRef, "todo");
 
-      await addDoc(todosCollectionRef, {
-        ...todoData,
-        completed: false, // 기본값으로 false 설정
-        timestamp: serverTimestamp(),
-      });
+      const offset = new Date().getTimezoneOffset() * 60000;
+
+      if (todoData.date) {
+        const localDate = new Date(todoData.date);
+        const adjustedDate = new Date(localDate.getTime() - offset);
+
+        await addDoc(todosCollectionRef, {
+          ...todoData,
+          id: Date.now(),
+          completed: false,
+          timestamp: serverTimestamp(),
+          date: adjustedDate.toISOString(),
+        });
+
+        console.log("Stored date:", adjustedDate.toISOString());
+      } else {
+        await addDoc(todosCollectionRef, {
+          ...todoData,
+          id: Date.now(),
+          completed: false,
+          timestamp: serverTimestamp(),
+          date: null,
+        });
+      }
 
       setStatus("success");
     } catch (err) {

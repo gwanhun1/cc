@@ -1,16 +1,21 @@
 import React from "react";
 import { Paper } from "@mui/material";
 import useIsMobile from "../../hooks/useIsMobile";
+import { TodoItemType } from "../../hooks/useTodoGet";
 import { TodoHeader } from "./TodoHeader";
 import { TodoList } from "./TodoList";
-import { Todo } from "./TodoListContainer";
 
 interface TodoTemplateProps {
-  todos: Todo[];
+  todos: TodoItemType[];
   onToggleTodo: (id: number) => void;
+  refetch: any;
 }
 
-export const TodoTemplate = ({ todos, onToggleTodo }: TodoTemplateProps) => {
+export const TodoTemplate = ({
+  todos,
+  onToggleTodo,
+  refetch,
+}: TodoTemplateProps) => {
   const isMobile = useIsMobile();
 
   return (
@@ -33,7 +38,7 @@ export const TodoTemplate = ({ todos, onToggleTodo }: TodoTemplateProps) => {
         },
       }}
     >
-      <TodoHeader count={todos.length} />
+      <TodoHeader count={todos.length} refetch={refetch} />
       <TodoList todos={todos} onToggle={onToggleTodo} />
     </Paper>
   );
