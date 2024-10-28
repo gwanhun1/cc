@@ -14,6 +14,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onToggle }) => {
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}
+          id={todo.id}
           text={todo.text}
           completed={todo.completed}
           date={todo.date}

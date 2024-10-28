@@ -9,5 +9,6 @@ export const COLOR = {
   green: "#5dc062",
   pink: "#cf364d",
   hotpink: "#e4203d",
+  lightPink: "#fbe4e7",
   black: "#444444",
 };

@@ -18,12 +18,12 @@ export const TodoListContainer = () => {
     formatYearMonth(currentDate),
   );
   const { updateTodoInFirebase } = useUpdateTodo();
+  console.log(todos);
 
   useEffect(() => {
     const isSameDate = (dueDate, imageDate) => {
       const dueDateObj = new Date(dueDate);
       const imageDateObj = new Date(imageDate);
-
       return (
         dueDateObj.getUTCFullYear() === imageDateObj.getUTCFullYear() &&
         dueDateObj.getUTCMonth() === imageDateObj.getUTCMonth() &&
@@ -40,8 +40,13 @@ export const TodoListContainer = () => {
       return { ...todo, completed: isCompleted };
     });
 
-    if (JSON.stringify(updatedTodos) !== JSON.stringify(todos)) {
-      setTodos(updatedTodos);
+    // todos를 date 기준으로 오름차순 정렬
+    const sortedTodos = updatedTodos.sort(
+      (a, b) => new Date(a.date) - new Date(b.date),
+    );
+
+    if (JSON.stringify(sortedTodos) !== JSON.stringify(todos)) {
+      setTodos(sortedTodos);
     }
   }, [images, updateTodoInFirebase, todos, setTodos]);
 

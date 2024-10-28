@@ -60,7 +60,7 @@ export function useMonthlyTodos(currentMonthKey: string) {
           auth.currentUser.uid,
           "months",
           monthKey,
-          "todo", // 'images'에서 'todo'로 변경
+          "todo",
         );
         const q = query(userRef);
         const querySnapshot = await getDocs(q);

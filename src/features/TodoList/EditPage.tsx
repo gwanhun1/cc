@@ -32,7 +32,7 @@ const EditPage = ({ setEdit, refetch }: EditPageProps) => {
   const { uploadTodoItem, status, error } = useTodoUpload();
 
   const handleSave = async () => {
-    if ((memo && memo.length > 0) || date !== null) {
+    if (memo && memo.length > 0 && date !== null) {
       try {
         await uploadTodoItem({
           text: memo,
