@@ -7,8 +7,9 @@ interface LayoutProps {
 }
 
 const boxStyle = {
-  display: "flex",
+  // display: "flex",
   flex: 1,
+  marginTop: 6,
 };
 
 const Layout = ({ children }: LayoutProps) => {

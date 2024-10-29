@@ -7,10 +7,11 @@ import { DateFormatHandler } from "./DateFormatHandler";
 import { TodoCheckbox } from "./TodoCheckBox";
 
 interface TodoItemProps {
-  id: string; // Ensure this matches the document ID in Firestore
+  id: any;
   text: string | null;
   completed: boolean;
-  date: string; // Use string format that matches the upload date format
+  date?: string;
+  currentMonthKey: any;
   onToggle: () => void;
 }
 
@@ -19,6 +20,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   text,
   completed,
   date,
+  currentMonthKey,
   onToggle,
 }) => {
   const [hover, setHover] = useState(false);
@@ -34,21 +36,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleDelete = async () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      console.log("=== Delete Handler Started ===");
-      console.log("Deleting todo:", {
-        id,
-        text,
-        completed,
-        date,
-      });
-
       try {
-        await deleteTodoItem({ text: "13231" });
-        // 성공적으로 삭제되면 여기까지 실행됩니다
+        await deleteTodoItem(id, currentMonthKey);
         console.log("Todo successfully deleted");
-      } catch (err) {
-        console.error("Failed to delete todo:", err);
-      }
+        alert("문제가 발생했습니다.🥲");
+      } catch (err) {}
     }
   };
 

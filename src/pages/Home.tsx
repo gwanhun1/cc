@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Grid, Typography } from "@mui/material";
+import calendar from "../assets/calendar.png";
+import todoList from "../assets/todolist.png";
 import useIsMobile from "../hooks/useIsMobile";
 import { COLOR } from "../style/constants";
 
@@ -63,7 +65,6 @@ const Home = () => {
             CC와 함께 일정을 정리하고 소중한 추억을 캘린더에 담아보세요.
           </Typography>
         </Grid>
-
         <Grid item xs={12} md={6}>
           <Box
             sx={{
@@ -76,6 +77,7 @@ const Home = () => {
               fullWidth
               sx={{
                 position: "absolute",
+                padding: 0,
                 top: 0,
                 left: 0,
                 width: "100%",
@@ -92,11 +94,14 @@ const Home = () => {
               }}
               onClick={() => navigate("/todoList")}
             >
-              TODOLIST
+              <img
+                src={todoList}
+                loading="lazy"
+                style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+              />
             </Button>
           </Box>
         </Grid>
-
         <Grid item xs={12} md={6}>
           <Box
             sx={{
@@ -109,6 +114,7 @@ const Home = () => {
               fullWidth
               sx={{
                 position: "absolute",
+                padding: 0,
                 top: 0,
                 left: 0,
                 width: "100%",
@@ -125,7 +131,11 @@ const Home = () => {
               }}
               onClick={() => navigate("/calendar")}
             >
-              CALENDAR
+              <img
+                src={calendar}
+                loading="lazy"
+                style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+              />
             </Button>
           </Box>
         </Grid>

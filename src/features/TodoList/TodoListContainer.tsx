@@ -60,7 +60,7 @@ export const TodoListContainer = () => {
 
   return (
     <AuthGuard>
-      <Box sx={{ bgcolor: "background.default", minHeight: "100vh" }}>
+      <Box sx={{ minHeight: "100vh" }}>
         <TodoTemplate
           todos={todos}
           onToggleTodo={handleToggleTodo}

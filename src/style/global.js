@@ -30,7 +30,8 @@ export default StyleSheet.create({
     // display: flex;
   place-items: center;
   justify-content: center;
-    'minWidth': [{ 'unit': 'px', 'value': 320 }]
+    'minWidth': [{ 'unit': 'px', 'value': 320 }],
+    'backgroundColor': '#efefef'
   },
   'h1': {
     'fontSize': [{ 'unit': 'em', 'value': 3.2 }],

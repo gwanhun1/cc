@@ -25,6 +25,7 @@ const CalendarContainer = () => {
   const [upload, setUpload] = useRecoilState(loadState);
 
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleReset = () => {
     setCurrentDate(new Date());
@@ -34,7 +35,18 @@ const CalendarContainer = () => {
 
   return (
     <AuthGuard>
-      <Box display="flex" flexDirection="column" width="100%">
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="100%"
+        bgcolor="#fff"
+        borderRadius={2}
+        p={isMdDown ? 1 : 3}
+        sx={{
+          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
+          boxSizing: "border-box",
+        }}
+      >
         <Box
           display="flex"
           justifyContent="space-between"
