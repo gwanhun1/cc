@@ -11,17 +11,14 @@ export function useTodoDelete() {
   const deleteTodoItem = async (todoId: string, currentMonthKey: string) => {
     const db = getFirestore();
     const auth = getAuth();
-
     if (!auth.currentUser) {
       setStatus("error");
       setError("User not authenticated");
       return;
     }
 
-    console.log(
-      "Deleting from path:",
-      `users/${auth.currentUser.uid}/months/${currentMonthKey}/todo/${todoId}`,
-    );
+    const todoPath = `/users/${auth.currentUser.uid}/months/${currentMonthKey}/todo/${todoId}`;
+    console.log("Deleting from path:", todoPath);
 
     setStatus("loading");
     setError(null);
@@ -38,7 +35,12 @@ export function useTodoDelete() {
       );
       await deleteDoc(todoRef);
       setStatus("success");
-    } catch (err) {}
+      console.log("Todo successfully deleted");
+    } catch (err) {
+      setStatus("error");
+      setError("Failed to delete todo item");
+      console.error("Delete error:", err);
+    }
   };
 
   return { deleteTodoItem, status, error };

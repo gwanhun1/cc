@@ -1,30 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import koLocale from "@fullcalendar/core/locales/ko";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import { useRecoilState } from "recoil";
-import { Box, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import CustomModal from "../../components/common/CustomModal";
 import EventContent from "../../components/home/EventContent";
+import TodoContent from "../../components/home/todoContent";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { useModal } from "../../hooks/useModal";
+import { useMonthlyTodos } from "../../hooks/useTodoGet";
 import { currentDateState } from "../../recoil/atoms";
 import theme from "../../theme";
 import { formatYearMonth } from "../../utils/formatYearMonth";
 import DetailPage from "./DetailPage";
 import "./styles.css";
 
-const renderEventContent = (eventInfo: {
+interface EventContentProps {
   backgroundColor?: string;
   timeText: any;
   event: {
     title: any;
-    _def: { extendedProps: { img: string; imageUrl?: string; date?: string } };
+    _def: { extendedProps: { img?: string; imageUrl?: string; date?: string } };
   };
-}) => {
+}
+
+const renderEventContent = (eventInfo: EventContentProps) => {
   const { imageUrl } = eventInfo.event._def.extendedProps;
-  return <EventContent imageUrl={imageUrl} title={eventInfo.event.title} />;
+  return (
+    <>
+      {imageUrl ? (
+        <EventContent imageUrl={imageUrl} title={eventInfo.event.title} />
+      ) : (
+        <TodoContent title={eventInfo.event.title} />
+      )}
+    </>
+  );
 };
 
 const Calendar = ({ upload }: { upload: boolean }) => {
@@ -37,11 +49,13 @@ const Calendar = ({ upload }: { upload: boolean }) => {
   const [imageId, setImageId] = useState("");
 
   const handleClickEvent = (data: any) => {
-    setDate(data.event.startStr);
-    setTitle(data.event.title);
-    setImageUrl(data.event.extendedProps.imageUrl);
-    setImageId(data.event.id);
-    openModal();
+    if (data.event.extendedProps.imageUrl) {
+      setDate(data.event.startStr);
+      setTitle(data.event.title);
+      setImageUrl(data.event.extendedProps.imageUrl);
+      setImageId(data.event.id);
+      openModal();
+    }
   };
 
   useEffect(() => {
@@ -51,11 +65,29 @@ const Calendar = ({ upload }: { upload: boolean }) => {
     }
   }, [currentDate]);
 
-  const { images, refetch } = useMonthlyImages(formatYearMonth(currentDate));
+  const { images, refetch: imageRefetch } = useMonthlyImages(
+    formatYearMonth(currentDate),
+  );
+  const {
+    todos,
+    setTodos,
+    refetch: todoRefetch,
+  } = useMonthlyTodos(formatYearMonth(currentDate));
+
+  const finalData = useMemo(() => {
+    const todoItems = convertTodoImage(todos);
+    const sortedTodos = todoItems
+      .slice()
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const sortedImages = images
+      .slice()
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return [...sortedTodos, ...sortedImages];
+  }, [todos, images]);
 
   useEffect(() => {
-    refetch();
-  }, [upload]);
+    imageRefetch();
+  }, [upload]); // Removed imageRefetch from the dependency array.
 
   const getVisibleRange = (currentDate: Date) => {
     const start = new Date(
@@ -80,7 +112,7 @@ const Calendar = ({ upload }: { upload: boolean }) => {
         initialView="dayGridMonth"
         initialDate={currentDate}
         plugins={[dayGridPlugin, interactionPlugin]}
-        events={images}
+        events={finalData}
         eventContent={renderEventContent}
         headerToolbar={false}
         footerToolbar={false}
@@ -109,3 +141,24 @@ const Calendar = ({ upload }: { upload: boolean }) => {
 };
 
 export default Calendar;
+
+function convertTodoImage(a: any[]) {
+  const Images: any[] = [];
+  for (const item of a) {
+    const existingItem = Images.find((b) => b.id === item.id);
+    if (existingItem) {
+      existingItem.title = item.text || existingItem.title;
+      existingItem.date = item.date || existingItem.date;
+      existingItem.timestamp = item.timestamp || existingItem.timestamp;
+    } else {
+      Images.push({
+        id: item.id,
+        title: item.text || null,
+        date: item.date,
+        timestamp: item.timestamp,
+        imageUrl: null,
+      });
+    }
+  }
+  return Images;
+}

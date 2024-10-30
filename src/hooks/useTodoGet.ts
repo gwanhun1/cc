@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { errorState, fetchStatusState, todosState } from "../recoil/atoms";
 
 export type TodoItemType = {
-  id: number; // ID 타입을 숫자로 설정
+  id: string;
   text: string | null;
   date: Date | null;
   completed: boolean;
@@ -66,7 +66,7 @@ export function useMonthlyTodos(currentMonthKey: string) {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           allTodos.push({
-            id: Date.now(), // ID를 현재 시간 밀리초로 설정
+            id: doc.id,
             ...(doc.data() as Omit<TodoItemType, "id">),
           });
         });

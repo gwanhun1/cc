@@ -38,9 +38,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     if (window.confirm("삭제하시겠습니까?")) {
       try {
         await deleteTodoItem(id, currentMonthKey);
-        console.log("Todo successfully deleted");
-        alert("문제가 발생했습니다.🥲");
-      } catch (err) {}
+      } catch (err) {
+        alert("삭제에 실패했습니다.");
+      }
     }
   };
 
