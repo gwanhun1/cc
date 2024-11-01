@@ -1,5 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import styled from "styled-components";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {
@@ -9,6 +11,7 @@ import {
   IconButton,
   Typography,
   useMediaQuery,
+  Zoom,
 } from "@mui/material";
 import { AuthGuard } from "../../components/auth/authGuard";
 import Complete from "../../components/common/Complete";
@@ -20,9 +23,24 @@ import theme from "../../theme";
 import AddPage from "./AddPage";
 import Calendar from "./Calendar";
 
+const RotatingIconButton = styled(IconButton)(({ theme }) => ({
+  "&:hover": {
+    animation: "spin 0.8s linear infinite",
+  },
+  "@keyframes spin": {
+    "0%": {
+      transform: "rotate(0deg)",
+    },
+    "100%": {
+      transform: "rotate(360deg)",
+    },
+  },
+}));
+
 const CalendarContainer = () => {
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const [upload, setUpload] = useRecoilState(loadState);
+  const navigate = useNavigate();
 
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,40 +68,47 @@ const CalendarContainer = () => {
         <Box
           display="flex"
           justifyContent="space-between"
-          height={isSmDown ? 30 : 70}
+          mb={isSmDown ? 0 : 1}
         >
-          {isSmDown ? (
+          <Box>
+            <Button
+              variant="outlined"
+              sx={{
+                mt: isSmDown ? 1.5 : 4,
+                padding: isSmDown ? 0.5 : undefined,
+              }}
+              onClick={() => navigate("/todoList")}
+            >
+              <Typography
+                variant={isSmDown ? "body1" : "subtitle2"}
+                fontSize={isSmDown ? 10 : 20}
+              >
+                TODOLIST
+              </Typography>
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="flex-end">
+            <RotatingIconButton
+              aria-label="refresh"
+              size="medium"
+              onClick={handleReset}
+            >
+              <RefreshIcon
+                fontSize="inherit"
+                sx={{ color: COLOR.pink, fontSize: isSmDown ? 30 : 60 }}
+              />
+            </RotatingIconButton>
             <IconButton
               aria-label="delete"
               size="medium"
               onClick={() => openModal()}
             >
-              <AddCircleIcon fontSize="inherit" sx={{ color: COLOR.pink }} />
+              <AddCircleIcon
+                fontSize="inherit"
+                sx={{ color: COLOR.pink, fontSize: isSmDown ? 30 : 60 }}
+              />
             </IconButton>
-          ) : (
-            <Button
-              size="medium"
-              variant="contained"
-              sx={{ height: isSmDown ? 30 : 40 }}
-              onClick={() => openModal()}
-            >
-              <Typography fontSize={isSmDown ? 10 : 16}>Add Photo</Typography>
-            </Button>
-          )}
-          {isSmDown ? (
-            <IconButton aria-label="delete" size="medium" onClick={handleReset}>
-              <RefreshIcon fontSize="inherit" sx={{ color: COLOR.pink }} />
-            </IconButton>
-          ) : (
-            <Button
-              size="medium"
-              variant="contained"
-              sx={{ height: isSmDown ? 30 : 40 }}
-              onClick={handleReset}
-            >
-              <Typography fontSize={isSmDown ? 10 : 16}>Reset</Typography>
-            </Button>
-          )}
+          </Box>
         </Box>
         <Calendar upload={upload} />
         <CustomModal
