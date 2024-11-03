@@ -1,7 +1,7 @@
 import React from "react";
 import { getAuth } from "firebase/auth";
 import { useRecoilState } from "recoil";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import logo from "../../assets/logo.png";
 import useAuthService from "../../hooks/useAuthService";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
@@ -9,7 +9,6 @@ import useLoginForm from "../../hooks/useLoginForm";
 import { currentDateState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
 import { formatYearMonth } from "../../utils/formatYearMonth";
-import Loading from "../common/Loading";
 
 interface LoginPageProps {
   closeModal: () => void;
@@ -26,7 +25,7 @@ const LoginPage = ({ closeModal }: LoginPageProps) => {
     validateForm,
   } = useLoginForm("login");
   const { error, join, loginUser } = useAuthService();
-  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+  const [currentDate] = useRecoilState(currentDateState);
 
   const { refetch } = useMonthlyImages(formatYearMonth(currentDate));
 

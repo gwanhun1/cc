@@ -26,6 +26,23 @@ import theme from "../../theme";
 import DDayBox from "./DDayBox";
 import NavProfileButton from "./NavProfileButton";
 
+interface UserAuth {
+  currentUser?: {
+    displayName?: string | null;
+  };
+}
+
+interface User {
+  auth?: UserAuth;
+}
+
+interface MenuItem {
+  key: string;
+  label: string | React.ReactNode;
+  onClick?: () => void;
+  component?: React.ReactNode;
+}
+
 const boxStyle = {
   display: "flex",
   alignItems: "center",
@@ -95,27 +112,7 @@ export default function Nav() {
     window.location.href = "/";
   };
 
-  interface UserAuth {
-    currentUser?: {
-      displayName?: string | null;
-      // 필요한 추가 필드 정의
-    };
-  }
-
-  interface User {
-    auth?: UserAuth;
-    // 필요한 추가 필드 정의
-  }
-
-  interface MenuItem {
-    key: string;
-    label: string | React.ReactNode;
-    onClick?: () => void;
-    component?: React.ReactNode; // 선택적 컴포넌트 필드 추가
-  }
-
   const getMenuItems = (index: number): MenuItem[] | undefined => {
-    // user의 타입을 User로 설정
     if (index === 1 && user && user.auth && user.auth.currentUser) {
       return [
         {
@@ -133,7 +130,7 @@ export default function Nav() {
     if (index === 2) {
       return [
         {
-          key: "dday",
+          key: "D-Day",
           label: "D-Day",
           component: (
             <DDayBox daysPassed={daysPassed} setDaysPassed={setDaysPassed} />

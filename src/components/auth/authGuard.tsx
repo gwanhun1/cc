@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import CustomModal from "../common/CustomModal";
 import LoginPage from "./LoginPage";
 
@@ -10,9 +16,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
+export const AuthGuard = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [token, setToken] = useState<string | null>(
+  const [_, setToken] = useState<string | null>(
     localStorage.getItem("authToken"),
   );
 

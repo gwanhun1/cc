@@ -43,7 +43,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       }
     }
   };
-  console.log(date);
 
   return (
     <Box

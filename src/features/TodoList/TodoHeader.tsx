@@ -16,7 +16,13 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count, refetch }) => {
   const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const [edit, setEdit] = useState(false);
   const dateObject = new Date(currentDate);
-  const options = { month: "long" }; // 'long' 형식으로 설정
+
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    // year: "numeric",
+    // day: "numeric",
+  };
+
   const monthName = dateObject.toLocaleString("en-US", options).toUpperCase();
   const isMobile = useIsMobile();
 

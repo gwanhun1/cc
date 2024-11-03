@@ -13,7 +13,7 @@ interface AddPageProps {
 }
 
 const AddPage = ({ onClose }: AddPageProps) => {
-  const [upload, setUpload] = useRecoilState(loadState);
+  const [_, setUpload] = useRecoilState(loadState);
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -48,8 +48,6 @@ const AddPage = ({ onClose }: AddPageProps) => {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-
-      const dateString = `${year}-${month}-${day}`;
 
       try {
         await uploadImage({

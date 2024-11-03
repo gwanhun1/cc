@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { errorState, fetchStatusState, todosState } from "../recoil/atoms";
 
 export type TodoItemType = {
-  id: string;
+  id: string | number;
   text: string | null;
   date: Date | null;
   completed: boolean;
@@ -15,16 +15,12 @@ export type TodoItemType = {
 
 export type FetchStatus = "idle" | "loading" | "success" | "error";
 
-function cacheTodos(todos: TodoItemType[]): void {
-  // 캐시할 경우 Todo 항목을 처리하는 로직 (필요시 추가)
-}
-
 export function useTodoGet(currentMonthKey: string): string[] {
   return [currentMonthKey];
 }
 
 export function useMonthlyTodos(currentMonthKey: string) {
-  const [todos, setTodos] = useRecoilState(todosState); // 상태를 todosState로 변경
+  const [todos, setTodos] = useRecoilState(todosState);
   const setStatus = useSetRecoilState(fetchStatusState);
   const setError = useSetRecoilState(errorState);
   const db = getFirestore();
@@ -60,7 +56,6 @@ export function useMonthlyTodos(currentMonthKey: string) {
           });
         });
       }
-      cacheTodos(allTodos); // 필요시 캐시 처리
       setTodos(allTodos);
       setStatus("success");
     } catch (err) {

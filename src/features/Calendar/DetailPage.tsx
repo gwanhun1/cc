@@ -76,13 +76,12 @@ const DetailPage = ({
 
     try {
       await deleteImage({
-        imageUrl: imageUrlParams, // Firebase Storage URL
-        date: dateParams, // 해당 이미지가 속한 날짜
-        imageId: imageIdParams, // Firestore 문서의 ID
+        imageUrl: imageUrlParams,
+        date: dateParams,
+        imageId: imageIdParams,
       });
 
-      // 상태 업데이트
-      setUpload(true); // 데이터 리로드를 위한 상태 변경
+      setUpload(true);
 
       alert("삭제가 완료되었습니다");
 
@@ -92,8 +91,8 @@ const DetailPage = ({
         setTitle("");
         setDate(null);
         setImageId("");
-        setUpload(false); // 리렌더링 완료
-        onClose(); // 모달 닫기
+        setUpload(false);
+        onClose();
       }, 500);
     } catch (err) {
       console.error("Error deleting image:", err);
@@ -110,7 +109,7 @@ const DetailPage = ({
           file: selectedImage instanceof File ? selectedImage : undefined,
           url: typeof previewImage === "string" ? previewImage : undefined,
           title,
-          date: typeof date === "string" ? date : date.toISOString(), // Convert to string if it's a Date object
+          date: typeof date === "string" ? date : date.toISOString(),
         };
 
         await editImage(imageData);

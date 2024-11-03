@@ -8,7 +8,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { currentDateState } from "../../recoil/atoms";
-// UTC 플러그인 추가
 import { formatYearMonth } from "../../utils/formatYearMonth";
 
 dayjs.extend(utc); // Dayjs에 UTC 플러그인 적용
@@ -26,19 +25,18 @@ export default function BasicDatePicker({
     onChange(newValue ? newValue.toDate() : null);
   };
 
-  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+  const [currentDate] = useRecoilState(currentDateState);
 
-  const { images, refetch } = useMonthlyImages(formatYearMonth(currentDate));
+  const { images } = useMonthlyImages(formatYearMonth(currentDate));
 
-  // 이미지가 있는 날짜들을 Set으로 저장
   const disabledDates = useMemo(() => {
     return new Set(
       images.map((img) => dayjs(img.date).utc().format("YYYY-MM-DD")),
-    ); // UTC 형식으로 변환
+    );
   }, [images]);
 
   const shouldDisableDate = (date: Dayjs) => {
-    const dateString = date.utc().format("YYYY-MM-DD"); // Dayjs 객체를 UTC로 변환하여 YYYY-MM-DD 형식으로 변환
+    const dateString = date.utc().format("YYYY-MM-DD");
 
     return disabledDates.has(dateString);
   };

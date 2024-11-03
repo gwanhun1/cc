@@ -10,7 +10,6 @@ export const useUpdateTodo = () => {
 
       const todoRef = doc(db, "todos", id);
       await updateDoc(todoRef, updatedData);
-      console.log(`Todo with ID ${id} updated successfully.`);
     } catch (error) {
       console.error("Error updating todo: ", error);
     }

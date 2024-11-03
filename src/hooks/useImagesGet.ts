@@ -15,7 +15,6 @@ export type Image = {
 
 export type FetchStatus = "idle" | "loading" | "success" | "error";
 
-// Helper function to preload images
 function cacheImages(images: Image[]): void {
   images.forEach((image) => {
     const img = new window.Image();
@@ -23,7 +22,6 @@ function cacheImages(images: Image[]): void {
   });
 }
 
-// Generate month keys for fetching
 function generateMonthKeys(currentMonthKey: string): string[] {
   const [year, month] = currentMonthKey.split("-").map(Number);
   const monthKeys: string[] = [];
@@ -87,7 +85,6 @@ export function useMonthlyImages(currentMonthKey: string) {
         }),
       );
 
-      // Sort images by timestamp if needed
       const sortedImages = allImages.sort(
         (a, b) => b.timestamp?.toMillis() - a.timestamp?.toMillis(),
       );

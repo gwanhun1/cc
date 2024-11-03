@@ -17,9 +17,6 @@ export function useTodoDelete() {
       return;
     }
 
-    const todoPath = `/users/${auth.currentUser.uid}/months/${currentMonthKey}/todo/${todoId}`;
-    console.log("Deleting from path:", todoPath);
-
     setStatus("loading");
     setError(null);
 
@@ -35,7 +32,6 @@ export function useTodoDelete() {
       );
       await deleteDoc(todoRef);
       setStatus("success");
-      console.log("Todo successfully deleted");
     } catch (err) {
       setStatus("error");
       setError("Failed to delete todo item");

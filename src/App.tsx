@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import Loading from "./components/common/Loading";
 import Footer from "./components/layout/Footer";
 import Nav from "./components/layout/Nav";
-import { useMonthlyImages } from "./hooks/useImagesGet";
 import Layout from "./layout/layout";
-import { currentDateState } from "./recoil/atoms";
 import { Router } from "./Router";
-import { formatYearMonth } from "./utils/formatYearMonth";
-
-// 추가
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
@@ -26,10 +19,7 @@ const App = () => {
     checkToken();
   }, [token]);
 
-  const { images } = useMonthlyImages(formatYearMonth(currentDate));
-
   if (isLoading) {
-    console.log("Still loading...");
     return <Loading />;
   }
 

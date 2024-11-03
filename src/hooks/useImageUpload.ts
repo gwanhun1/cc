@@ -13,7 +13,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 type ImageData = {
   file: File;
   title: string;
-  date: string; // "YYYY-MM-DD" format
+  date: string;
 };
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
@@ -32,16 +32,14 @@ async function processImage(file: File): Promise<Blob> {
 
   return new Promise((resolve, reject) => {
     img.onload = () => {
-      const targetRatio = 56.92 / 50; // Target aspect ratio
+      const targetRatio = 56.92 / 50;
 
-      // Original image dimensions
       const { width: originalWidth, height: originalHeight } = img;
 
       let cropWidth, cropHeight;
       let offsetX = 0,
         offsetY = 0;
 
-      // Determine crop dimensions based on aspect ratio
       if (originalWidth / originalHeight > targetRatio) {
         cropWidth = originalHeight * targetRatio;
         cropHeight = originalHeight;
@@ -55,7 +53,6 @@ async function processImage(file: File): Promise<Blob> {
       canvas.width = cropWidth;
       canvas.height = cropHeight;
 
-      // Draw the cropped image
       ctx?.drawImage(
         img,
         offsetX,
@@ -68,7 +65,6 @@ async function processImage(file: File): Promise<Blob> {
         cropHeight,
       );
 
-      // Convert canvas to Blob
       canvas.toBlob(
         (blob) => {
           if (blob) {
@@ -112,7 +108,6 @@ export function useImageUpload(): UseImageUploadResult {
     try {
       const processedFile = file;
 
-      // ISO 날짜 문자열에서 년도와 월 추출
       const dateObj = new Date(date);
       const year = dateObj.getUTCFullYear();
       const month = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
@@ -136,7 +131,7 @@ export function useImageUpload(): UseImageUploadResult {
       await addDoc(imagesCollectionRef, {
         imageUrl: downloadURL,
         title: title,
-        date: date, // ISO 형식의 날짜 저장
+        date: date,
         timestamp: serverTimestamp(),
       });
 

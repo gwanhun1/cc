@@ -12,24 +12,23 @@ const DDayBox = ({
   setDaysPassed: (value: number | ((prevState: number) => number)) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null); // 선택된 날짜 상태
+  const [value, setValue] = useState(null);
 
   const handleDatePicker = () => {
     setOpen((prev) => !prev);
   };
 
   const handleDateChange = (newValue) => {
-    setValue(newValue); // 날짜 값 업데이트
+    setValue(newValue);
 
     if (newValue) {
-      // 선택한 날짜가 있을 경우
       const selectedDate = dayjs(newValue);
-      const currentDate = dayjs(); // 현재 날짜
-      const difference = currentDate.diff(selectedDate, "day"); // 일수 계산
-      setDaysPassed(difference); // 경과된 날짜 상태 업데이트
+      const currentDate = dayjs();
+      const difference = currentDate.diff(selectedDate, "day");
+      setDaysPassed(difference);
     }
 
-    setOpen(false); // 날짜 선택 후 모달 닫기
+    setOpen(false);
   };
 
   return (
@@ -59,7 +58,7 @@ const DDayBox = ({
               textField: { size: "small", fullWidth: true },
             }}
             value={value}
-            onChange={handleDateChange} // 날짜 변경 시 호출
+            onChange={handleDateChange}
           />
         ) : (
           <Button variant="contained" onClick={handleDatePicker}>

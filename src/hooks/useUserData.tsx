@@ -24,12 +24,11 @@ function useUserData() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // firebaseUser에서 필요한 정보를 사용하여 User 객체 생성
         const user: User = {
           uid: firebaseUser.uid,
           displayName: firebaseUser.displayName,
           email: firebaseUser.email,
-          auth: firebaseUser, // 여기서는 firebaseUser를 auth로 설정
+          auth: firebaseUser,
         };
         setUser(user);
 
@@ -38,7 +37,7 @@ function useUserData() {
             const userDocRef = doc(db, "users", firebaseUser.uid);
             const userDocSnap = await getDoc(userDocRef);
             if (userDocSnap.exists()) {
-              setUserData(userDocSnap.data() as UserData); // 데이터 타입 단언
+              setUserData(userDocSnap.data() as UserData);
             } else {
               setUserData(null);
             }
@@ -51,8 +50,7 @@ function useUserData() {
         };
         fetchData();
       } else {
-        // 사용자가 로그아웃한 경우
-        setUser(null); // 변경: user를 null로 설정
+        setUser(null);
         setUserData(null);
         setLoading(false);
       }

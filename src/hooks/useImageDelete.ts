@@ -5,9 +5,9 @@ import { deleteDoc, doc, getFirestore } from "firebase/firestore";
 import { deleteObject, getStorage, ref } from "firebase/storage";
 
 type DeleteImageData = {
-  imageUrl: string; // 이미지의 Firebase Storage URL
-  date: string; // "YYYY-MM-DD" 형식의 날짜
-  imageId: string; // Firestore에 저장된 이미지 문서의 ID
+  imageUrl: string;
+  date: string;
+  imageId: string;
 };
 
 type DeleteStatus = "idle" | "deleting" | "success" | "error";

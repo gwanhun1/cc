@@ -53,16 +53,12 @@ export function useTodoUpload(): UseTodoUploadResult {
         ? new Date(todoData.date.getTime() - offset).toISOString()
         : null;
 
-      // Firestore에 저장하고 생성된 `id`를 가져옴
       const docRef = await addDoc(todosCollectionRef, {
         ...todoData,
         completed: false,
         timestamp: serverTimestamp(),
         date: localDate,
       });
-
-      // `id`를 데이터에 포함시키는 방법
-      console.log("Saved with Firestore ID:", docRef.id);
 
       setStatus("success");
     } catch (err) {

@@ -33,20 +33,17 @@ async function processImage(file: File): Promise<Blob> {
 
   return new Promise((resolve, reject) => {
     img.onload = () => {
-      const targetRatio = 56.92 / 50; // 목표 비율 56.92:50
+      const targetRatio = 56.92 / 50;
 
-      // 이미지의 원래 비율
       const originalRatio = img.width / img.height;
 
       let targetWidth, targetHeight;
 
       if (originalRatio > targetRatio) {
-        // 이미지가 너무 넓은 경우
-        targetHeight = 260; // 원하는 높이
+        targetHeight = 260;
         targetWidth = targetHeight * targetRatio;
       } else {
-        // 이미지가 너무 높은 경우 또는 비율이 동일한 경우
-        targetWidth = 260; // 원하는 폭
+        targetWidth = 260;
         targetHeight = targetWidth / targetRatio;
       }
 

@@ -3,7 +3,6 @@ import { useRecoilState } from "recoil";
 import { Box } from "@mui/material";
 import { AuthGuard } from "../../components/auth/authGuard";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
-import useIsMobile from "../../hooks/useIsMobile";
 import { useMonthlyTodos } from "../../hooks/useTodoGet";
 import { useUpdateTodo } from "../../hooks/useUpdateTodo";
 import { currentDateState } from "../../recoil/atoms";
@@ -11,14 +10,12 @@ import { formatYearMonth } from "../../utils/formatYearMonth";
 import { TodoTemplate } from "./TodoTemplate";
 
 export const TodoListContainer = () => {
-  const isMobile = useIsMobile();
   const [currentDate] = useRecoilState(currentDateState);
   const { images } = useMonthlyImages(formatYearMonth(currentDate));
   const { todos, setTodos, refetch } = useMonthlyTodos(
     formatYearMonth(currentDate),
   );
   const { updateTodoInFirebase } = useUpdateTodo();
-  console.log(todos);
 
   useEffect(() => {
     const isSameDate = (dueDate, imageDate) => {
@@ -36,7 +33,6 @@ export const TodoListContainer = () => {
         isSameDate(todo.date, image.date),
       );
       if (todo.completed !== isCompleted) {
-        // Firebase 업데이트 호출
         updateTodoInFirebase(todo.id, { completed: isCompleted });
       }
       return { ...todo, completed: isCompleted };

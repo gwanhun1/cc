@@ -7,7 +7,6 @@ interface LayoutProps {
 }
 
 const boxStyle = {
-  // display: "flex",
   flex: 1,
   marginTop: 6,
 };
@@ -15,7 +14,6 @@ const boxStyle = {
 const Layout = ({ children }: LayoutProps) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // 모바일에서는 56px, 데스크탑에서는 66px의 nav 높이를 설정
   const navHeight = isSmDown ? "56px" : "66px";
 
   return (

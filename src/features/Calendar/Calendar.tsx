@@ -40,7 +40,7 @@ const renderEventContent = (eventInfo: EventContentProps) => {
 };
 
 const Calendar = ({ upload }: { upload: boolean }) => {
-  const [currentDate, setCurrentDate] = useRecoilState(currentDateState);
+  const [currentDate] = useRecoilState(currentDateState);
   const calendarRef = useRef<FullCalendar | null>(null);
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [date, setDate] = useState("");
@@ -68,11 +68,7 @@ const Calendar = ({ upload }: { upload: boolean }) => {
   const { images, refetch: imageRefetch } = useMonthlyImages(
     formatYearMonth(currentDate),
   );
-  const {
-    todos,
-    setTodos,
-    refetch: todoRefetch,
-  } = useMonthlyTodos(formatYearMonth(currentDate));
+  const { todos } = useMonthlyTodos(formatYearMonth(currentDate));
 
   const finalData = useMemo(() => {
     const todoItems = convertTodoImage(todos);
@@ -87,7 +83,7 @@ const Calendar = ({ upload }: { upload: boolean }) => {
 
   useEffect(() => {
     imageRefetch();
-  }, [upload]); // Removed imageRefetch from the dependency array.
+  }, [upload]);
 
   const getVisibleRange = (currentDate: Date) => {
     const start = new Date(

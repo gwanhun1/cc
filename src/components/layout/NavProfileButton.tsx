@@ -9,7 +9,7 @@ import { useNavMenu } from "../../hooks/useNavMenu";
 import { COLOR } from "../../style/constants";
 
 interface MenuItemProps {
-  label: string | React.ReactNode; // label의 타입을 수정
+  label: string | React.ReactNode;
   onClick?: () => void;
 }
 
@@ -20,7 +20,7 @@ interface NavProfileButtonProps {
   hasMenu?: boolean;
   menuItems?: MenuItemProps[];
   sx?: SxProps<Theme>;
-  onClick?: () => void; // onClick 속성 추가
+  onClick?: () => void;
 }
 
 const NavProfileButton = ({
@@ -40,7 +40,7 @@ const NavProfileButton = ({
         size="medium"
         edge="start"
         color="inherit"
-        aria-label={typeof label === "string" ? label : undefined} // label이 문자열일 때만 aria-label 설정
+        aria-label={typeof label === "string" ? label : undefined}
         onClick={hasMenu ? handleOpenMenu : undefined}
         {...props}
       >
@@ -83,7 +83,7 @@ const NavProfileButton = ({
               <MenuItem
                 key={index}
                 onClick={() => {
-                  item.onClick!(); // `item.onClick`이 정의되어 있다고 가정
+                  item.onClick!();
                   handleCloseMenu();
                 }}
               >
