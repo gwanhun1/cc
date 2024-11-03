@@ -15,15 +15,16 @@ export type Image = {
 
 export type FetchStatus = "idle" | "loading" | "success" | "error";
 
+// Helper function to preload images
 function cacheImages(images: Image[]): void {
   images.forEach((image) => {
-    const img = new Image();
+    const img = new window.Image();
     img.src = image.imageUrl;
   });
 }
 
-// 새로운 유틸리티 함수: 현재 월을 기준으로 이전 1개월을 포함한 2개월의 키를 생성
-function useImagesGet(currentMonthKey: string): string[] {
+// Generate month keys for fetching
+function generateMonthKeys(currentMonthKey: string): string[] {
   const [year, month] = currentMonthKey.split("-").map(Number);
   const monthKeys: string[] = [];
 
@@ -36,7 +37,7 @@ function useImagesGet(currentMonthKey: string): string[] {
       targetYear -= 1;
     }
 
-    monthKeys.push(`${targetYear}-${targetMonth.toString().padStart(2, "0")}`);
+    monthKeys.push(`${targetYear}-${String(targetMonth).padStart(2, "0")}`);
   }
 
   return monthKeys;
@@ -61,32 +62,38 @@ export function useMonthlyImages(currentMonthKey: string) {
     }
 
     try {
-      const monthKeys = useImagesGet(currentMonthKey);
+      const monthKeys = generateMonthKeys(currentMonthKey);
       const allImages: Image[] = [];
 
-      for (const monthKey of monthKeys) {
-        const userRef = collection(
-          db,
-          "users",
-          auth.currentUser.uid,
-          "months",
-          monthKey,
-          "images",
-        );
-        const q = query(userRef);
-        const querySnapshot = await getDocs(q);
+      await Promise.all(
+        monthKeys.map(async (monthKey) => {
+          const userRef = collection(
+            db,
+            "users",
+            auth.currentUser!.uid,
+            "months",
+            monthKey,
+            "images",
+          );
+          const q = query(userRef);
+          const querySnapshot = await getDocs(q);
 
-        querySnapshot.forEach((doc) => {
-          allImages.push({
-            id: doc.id,
-            ...(doc.data() as Omit<Image, "id">),
+          querySnapshot.forEach((doc) => {
+            allImages.push({
+              id: doc.id,
+              ...(doc.data() as Omit<Image, "id">),
+            });
           });
-        });
-      }
+        }),
+      );
 
-      cacheImages(allImages);
+      // Sort images by timestamp if needed
+      const sortedImages = allImages.sort(
+        (a, b) => b.timestamp?.toMillis() - a.timestamp?.toMillis(),
+      );
 
-      setImages(allImages);
+      cacheImages(sortedImages);
+      setImages(sortedImages);
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -111,9 +118,7 @@ export function useMonthlyImages(currentMonthKey: string) {
     return () => unsubscribe();
   }, [auth, currentMonthKey]);
 
-  const refetch = () => {
-    return fetchImages();
-  };
+  const refetch = () => fetchImages();
 
   return { images, refetch, setImages };
 }

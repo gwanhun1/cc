@@ -7,7 +7,7 @@ import { TodoList } from "./TodoList";
 
 interface TodoTemplateProps {
   todos: TodoItemType[];
-  onToggleTodo: (id: number) => void;
+  onToggleTodo: (id: number | string) => void;
   refetch: any;
 }
 

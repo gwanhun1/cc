@@ -15,11 +15,12 @@ interface MenuItemProps {
 
 interface NavProfileButtonProps {
   icon: React.ReactNode;
-  label: string | React.ReactNode; // label의 타입을 수정
+  label: string | React.ReactNode;
   badge?: number;
   hasMenu?: boolean;
   menuItems?: MenuItemProps[];
   sx?: SxProps<Theme>;
+  onClick?: () => void; // onClick 속성 추가
 }
 
 const NavProfileButton = ({
@@ -77,27 +78,25 @@ const NavProfileButton = ({
           open={isOpen}
           onClose={handleCloseMenu}
         >
-          {menuItems.map((item, index) => (
-            <>
-              {item.onClick ? (
-                <MenuItem
-                  key={index}
-                  onClick={() => {
-                    item.onClick();
-                    handleCloseMenu();
-                  }}
-                >
-                  <Typography textAlign="center" color={COLOR.hotpink}>
-                    {item.label}
-                  </Typography>
-                </MenuItem>
-              ) : (
+          {menuItems.map((item, index) =>
+            item.onClick ? (
+              <MenuItem
+                key={index}
+                onClick={() => {
+                  item.onClick!(); // `item.onClick`이 정의되어 있다고 가정
+                  handleCloseMenu();
+                }}
+              >
                 <Typography textAlign="center" color={COLOR.hotpink}>
                   {item.label}
                 </Typography>
-              )}
-            </>
-          ))}
+              </MenuItem>
+            ) : (
+              <Typography key={index} textAlign="center" color={COLOR.hotpink}>
+                {item.label}
+              </Typography>
+            ),
+          )}
         </Menu>
       )}
     </Box>

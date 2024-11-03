@@ -35,15 +35,18 @@ export const TodoListContainer = () => {
       const isCompleted = images.some((image) =>
         isSameDate(todo.date, image.date),
       );
-      // Firebase 업데이트 호출
-      updateTodoInFirebase(todo.id, { completed: isCompleted });
+      if (todo.completed !== isCompleted) {
+        // Firebase 업데이트 호출
+        updateTodoInFirebase(todo.id, { completed: isCompleted });
+      }
       return { ...todo, completed: isCompleted };
     });
 
-    // todos를 date 기준으로 오름차순 정렬
-    const sortedTodos = updatedTodos.sort(
-      (a, b) => new Date(a.date) - new Date(b.date),
-    );
+    const sortedTodos = updatedTodos.sort((a, b) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateA - dateB;
+    });
 
     if (JSON.stringify(sortedTodos) !== JSON.stringify(todos)) {
       setTodos(sortedTodos);

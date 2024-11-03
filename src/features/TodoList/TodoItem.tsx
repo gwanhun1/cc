@@ -10,7 +10,7 @@ interface TodoItemProps {
   id: any;
   text: string | null;
   completed: boolean;
-  date?: string;
+  date?: Date | null;
   currentMonthKey: any;
   onToggle: () => void;
 }
@@ -43,6 +43,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       }
     }
   };
+  console.log(date);
 
   return (
     <Box

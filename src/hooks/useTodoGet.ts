@@ -20,18 +20,7 @@ function cacheTodos(todos: TodoItemType[]): void {
 }
 
 export function useTodoGet(currentMonthKey: string): string[] {
-  const [year, month] = currentMonthKey.split("-").map(Number);
-  const monthKeys: string[] = [];
-  for (let i = 0; i < 2; i++) {
-    let targetMonth = month - i;
-    let targetYear = year;
-    if (targetMonth <= 0) {
-      targetMonth += 12;
-      targetYear -= 1;
-    }
-    monthKeys.push(`${targetYear}-${targetMonth.toString().padStart(2, "0")}`);
-  }
-  return monthKeys;
+  return [currentMonthKey];
 }
 
 export function useMonthlyTodos(currentMonthKey: string) {

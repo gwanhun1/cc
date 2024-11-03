@@ -42,8 +42,8 @@ export default function Nav() {
     currentDate.getMonth() + 1
   }월`;
   const storedToken = localStorage.getItem("authToken");
-
-  const [daysPassed, setDaysPassed] = useState(0); // 경과된 날짜 상태
+  const [daysPassed, setDaysPassed] = useState(0);
+  const { user } = useUserData();
 
   useEffect(() => {
     setCurrentDate(new Date(currentDate));
@@ -60,17 +60,6 @@ export default function Nav() {
     newDate.setMonth(currentDate.getMonth() - 1);
     setCurrentDate(newDate);
   };
-
-  const navItems = [
-    { icon: <SearchIcon />, label: "search" },
-    { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
-    {
-      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 50 }} />,
-      label: "favorite",
-      badge: daysPassed,
-      hasMenu: true,
-    },
-  ];
 
   const handleProfileClick = () => {
     console.log("Profile clicked");
@@ -102,12 +91,75 @@ export default function Nav() {
     }
   };
 
-  const { user } = useUserData();
-
-  // 메인 페이지로 이동
   const goToHome = () => {
     window.location.href = "/";
   };
+
+  interface UserAuth {
+    currentUser?: {
+      displayName?: string | null;
+      // 필요한 추가 필드 정의
+    };
+  }
+
+  interface User {
+    auth?: UserAuth;
+    // 필요한 추가 필드 정의
+  }
+
+  interface MenuItem {
+    key: string;
+    label: string | React.ReactNode;
+    onClick?: () => void;
+    component?: React.ReactNode; // 선택적 컴포넌트 필드 추가
+  }
+
+  const getMenuItems = (index: number): MenuItem[] | undefined => {
+    // user의 타입을 User로 설정
+    if (index === 1 && user && user.auth && user.auth.currentUser) {
+      return [
+        {
+          key: "profile",
+          label: user.auth.currentUser.displayName || "",
+          onClick: handleProfileClick,
+        },
+        {
+          key: "logout",
+          label: "Logout",
+          onClick: handleLogoutClick,
+        },
+      ];
+    }
+    if (index === 2) {
+      return [
+        {
+          key: "dday",
+          label: "D-Day",
+          component: (
+            <DDayBox daysPassed={daysPassed} setDaysPassed={setDaysPassed} />
+          ),
+        },
+      ];
+    }
+    return undefined;
+  };
+
+  const navItems = [
+    { icon: <SearchIcon />, label: "search" },
+    { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
+    {
+      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 50 }} />,
+      label: "favorite",
+      badge: daysPassed,
+      hasMenu: true,
+    },
+  ];
+
+  const mobileMenuItems = [
+    { key: "search", label: "Search", onClick: handleProfileClick },
+    { key: "profile", label: "Profile", onClick: handleProfileClick },
+    { key: "love", label: "Love", onClick: handleLogoutClick },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -132,7 +184,7 @@ export default function Nav() {
             }}
             onClick={goToHome}
           >
-            <img src={logoW} loading="lazy" style={{ width: 30 }} />
+            <img src={logoW} loading="lazy" style={{ width: 30 }} alt="Logo" />
           </Box>
           <Box
             sx={{
@@ -178,11 +230,7 @@ export default function Nav() {
                     label="menu"
                     badge={undefined}
                     hasMenu={true}
-                    menuItems={[
-                      { label: "Search", onClick: handleProfileClick },
-                      { label: "Profile", onClick: handleProfileClick },
-                      { label: "Love", onClick: handleLogoutClick },
-                    ]}
+                    menuItems={mobileMenuItems}
                   />
                 ) : (
                   navItems.map((item, index) => (
@@ -195,29 +243,7 @@ export default function Nav() {
                       sx={{
                         ml: index > 0 ? 1 : 0,
                       }}
-                      menuItems={
-                        index === 1 && user
-                          ? [
-                              {
-                                label: user.auth.currentUser.displayName ?? "",
-                                onClick: handleProfileClick,
-                              },
-                              { label: "Logout", onClick: handleLogoutClick },
-                            ]
-                          : index === 2
-                            ? [
-                                {
-                                  label: (
-                                    <DDayBox
-                                      daysPassed={daysPassed}
-                                      setDaysPassed={setDaysPassed}
-                                    />
-                                  ),
-                                  onClick: false,
-                                },
-                              ] // Custom component example
-                            : undefined
-                      }
+                      menuItems={getMenuItems(index)}
                     />
                   ))
                 )}

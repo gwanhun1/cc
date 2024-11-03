@@ -5,7 +5,7 @@ import { TodoItem } from "./TodoItem";
 
 interface TodoListProps {
   todos: TodoItemType[];
-  onToggle: (id: number) => void;
+  onToggle: (id: number | string) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({ todos, onToggle }) => {
@@ -16,6 +16,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onToggle }) => {
           key={todo.id}
           id={todo.id}
           text={todo.text}
+          date={todo.date}
           completed={todo.completed}
           currentMonthKey={todo.date}
           onToggle={() => onToggle(todo.id)}
