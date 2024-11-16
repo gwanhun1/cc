@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { Box, Button, Collapse, Typography } from "@mui/material";
 import useIsMobile from "../../hooks/useIsMobile";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { currentDateState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
 import { AddButton } from "./AddButton";
@@ -30,6 +31,8 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count, refetch }) => {
     setEdit((prev) => !prev);
   };
 
+  const { color } = useUserThemeFetch();
+
   return (
     <>
       <Box
@@ -45,11 +48,11 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ count, refetch }) => {
           variant={isMobile ? "body1" : "h6"}
           sx={{ fontWeight: "bold" }}
         >
-          To Do (<span style={{ color: COLOR.hotpink }}>{count}</span>)
+          To Do (<span style={{ color: color }}>{count}</span>)
         </Typography>
         <Typography
           variant={isMobile ? "subtitle1" : "h5"}
-          color={COLOR.pink}
+          color={color}
           fontWeight={800}
           p={1}
           sx={{ textDecoration: "underline" }}

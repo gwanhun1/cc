@@ -16,7 +16,6 @@ interface MenuItemProps {
 interface NavProfileButtonProps {
   icon: React.ReactNode;
   label: string | React.ReactNode;
-  badge?: number;
   hasMenu?: boolean;
   menuItems?: MenuItemProps[];
   sx?: SxProps<Theme>;
@@ -26,7 +25,6 @@ interface NavProfileButtonProps {
 const NavProfileButton = ({
   icon,
   label,
-  badge,
   hasMenu,
   menuItems = [],
   sx,
@@ -45,22 +43,6 @@ const NavProfileButton = ({
         {...props}
       >
         {icon}
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "0.3rem",
-            fontWeight: "bold",
-            pointerEvents: "none",
-          }}
-        >
-          <Typography color={COLOR.hotpink}>{badge}</Typography>
-        </Box>
       </IconButton>
       {hasMenu && (
         <Menu
@@ -92,7 +74,12 @@ const NavProfileButton = ({
                 </Typography>
               </MenuItem>
             ) : (
-              <Typography key={index} textAlign="center" color={COLOR.hotpink}>
+              <Typography
+                key={index}
+                textAlign="center"
+                color={COLOR.hotpink}
+                minWidth={60}
+              >
                 {item.label}
               </Typography>
             ),

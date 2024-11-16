@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { ThemeProvider } from "@emotion/react";
 import Loading from "./components/common/Loading";
 import Footer from "./components/layout/Footer";
 import Nav from "./components/layout/Nav";
+import { useUserThemeFetch } from "./hooks/useUserThemeFetch";
 import Layout from "./layout/layout";
 import { Router } from "./Router";
+import { getDynamicTheme } from "./theme";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,17 +22,23 @@ const App = () => {
     checkToken();
   }, [token]);
 
-  if (isLoading) {
+  const { color, status } = useUserThemeFetch();
+
+  if (isLoading || status === "loading") {
     return <Loading />;
   }
 
+  const dynamicTheme = getDynamicTheme(color);
+
   return (
     <>
-      <Nav />
-      <Layout>
-        <Router />
-      </Layout>
-      <Footer />
+      <ThemeProvider theme={dynamicTheme}>
+        <Nav />
+        <Layout>
+          <Router />
+        </Layout>
+        <Footer />
+      </ThemeProvider>
     </>
   );
 };

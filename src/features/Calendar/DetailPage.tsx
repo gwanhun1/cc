@@ -7,6 +7,7 @@ import BasicDatePicker from "../../components/common/DatePicker";
 import { useImageDelete } from "../../hooks/useImageDelete";
 import { useImageEdit } from "../../hooks/useImageEdit";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { loadState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
 
@@ -132,11 +133,13 @@ const DetailPage = ({
     }
   };
 
+  const { color } = useUserThemeFetch();
+
   return (
     <form onSubmit={handleSubmit}>
       <Box display="flex" justifyContent="space-between">
         <Box>
-          <Typography variant="h6" color={COLOR.pink} fontWeight="bold">
+          <Typography variant="h6" color={color} fontWeight="bold">
             Your Memories
           </Typography>
           <Typography variant="subtitle2" color={COLOR.gray}>

@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import CircleIcon from "@mui/icons-material/Circle";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { useMediaQuery } from "@mui/material";
+import { Button, Divider, IconButton, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import logoW from "../../assets/logoW.png";
+import { useUserThemeUpload } from "../../hooks/useThemeUpdate";
 import useUserData from "../../hooks/useUserData";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import {
   currentDateState,
   errorState,
@@ -21,9 +23,7 @@ import {
   imagesState,
   loginState,
 } from "../../recoil/atoms";
-import { COLOR } from "../../style/constants";
 import theme from "../../theme";
-import DDayBox from "./DDayBox";
 import NavProfileButton from "./NavProfileButton";
 
 interface UserAuth {
@@ -59,8 +59,8 @@ export default function Nav() {
     currentDate.getMonth() + 1
   }월`;
   const storedToken = localStorage.getItem("authToken");
-  const [daysPassed, setDaysPassed] = useState(0);
   const { user } = useUserData();
+  const { color } = useUserThemeFetch();
 
   useEffect(() => {
     setCurrentDate(new Date(currentDate));
@@ -112,32 +112,73 @@ export default function Nav() {
     window.location.href = "/";
   };
 
+  const { uploadUserTheme } = useUserThemeUpload();
+
   const getMenuItems = (index: number): MenuItem[] | undefined => {
-    if (index === 1 && user && user.auth && user.auth.currentUser) {
+    if (index === 1 && user && user.displayName) {
       return [
         {
           key: "profile",
-          label: user.auth.currentUser.displayName || "",
+          label: (
+            <Box display="flex">
+              <Typography color={color}>{user.displayName || ""}</Typography>
+              <Divider
+                orientation="vertical"
+                variant="middle"
+                flexItem
+                sx={{ mx: 1 }}
+              />
+              <Typography color={color}>{user.email || ""}</Typography>
+            </Box>
+          ),
           onClick: handleProfileClick,
         },
         {
           key: "logout",
-          label: "Logout",
-          onClick: handleLogoutClick,
+          label: (
+            <>
+              <Button
+                variant="contained"
+                onClick={handleLogoutClick}
+                sx={{ my: 1 }}
+              >
+                <Typography>로그아웃</Typography>
+              </Button>
+            </>
+          ),
         },
       ];
     }
     if (index === 2) {
       return [
         {
-          key: "D-Day",
-          label: "D-Day",
-          component: (
-            <DDayBox daysPassed={daysPassed} setDaysPassed={setDaysPassed} />
+          key: "default",
+          label: (
+            <>
+              <Typography variant="subtitle1" color={color}>
+                테마 색 변경하기
+              </Typography>
+              <IconButton onClick={() => uploadUserTheme("default")}>
+                <CircleIcon sx={{ color: "#cf364d" }} />
+              </IconButton>
+              <IconButton onClick={() => uploadUserTheme("green")}>
+                <CircleIcon sx={{ color: "#28a745" }} />
+              </IconButton>
+              <IconButton onClick={() => uploadUserTheme("blue")}>
+                <CircleIcon sx={{ color: "#007bff" }} />
+              </IconButton>
+              <IconButton onClick={() => uploadUserTheme("black")}>
+                <CircleIcon sx={{ color: "#000000" }} />
+              </IconButton>
+              <IconButton onClick={() => uploadUserTheme("gray")}>
+                <CircleIcon sx={{ color: "#6c757d" }} />
+              </IconButton>
+            </>
           ),
         },
       ];
     }
+
     return undefined;
   };
 
@@ -145,9 +186,8 @@ export default function Nav() {
     { icon: <SearchIcon />, label: "search" },
     { icon: <AccountCircleIcon />, label: "account", hasMenu: true },
     {
-      icon: <FavoriteIcon fontSize="small" sx={{ fontSize: 50 }} />,
-      label: "favorite",
-      badge: daysPassed,
+      icon: <CircleIcon />,
+      label: "circle",
       hasMenu: true,
     },
   ];
@@ -163,7 +203,7 @@ export default function Nav() {
       <AppBar
         position="fixed"
         sx={{
-          bgcolor: COLOR.pink,
+          bgcolor: color,
           display: "flex",
           justifyContent: "center",
           width: "100%",
@@ -225,7 +265,6 @@ export default function Nav() {
                   <NavProfileButton
                     icon={<MenuIcon />}
                     label="menu"
-                    badge={undefined}
                     hasMenu={true}
                     menuItems={mobileMenuItems}
                   />
@@ -233,7 +272,6 @@ export default function Nav() {
                   navItems.map((item, index) => (
                     <NavProfileButton
                       key={item.label}
-                      badge={item.badge}
                       icon={item.icon}
                       label={item.label}
                       hasMenu={item.hasMenu}

@@ -13,8 +13,8 @@ import { AuthGuard } from "../../components/auth/authGuard";
 import Complete from "../../components/common/Complete";
 import CustomModal from "../../components/common/CustomModal";
 import { useModal } from "../../hooks/useModal";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { loadState } from "../../recoil/atoms";
-import { COLOR } from "../../style/constants";
 import theme from "../../theme";
 import AddPage from "./AddPage";
 import Calendar from "./Calendar";
@@ -27,6 +27,8 @@ const CalendarContainer = () => {
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
   const { isOpen, openModal, closeModal } = useModal();
+
+  const { color } = useUserThemeFetch();
 
   return (
     <AuthGuard>
@@ -72,7 +74,7 @@ const CalendarContainer = () => {
             >
               <AddCircleIcon
                 fontSize="inherit"
-                sx={{ color: COLOR.pink, fontSize: isSmDown ? 30 : 60 }}
+                sx={{ color: color, fontSize: isSmDown ? 30 : 60 }}
               />
             </IconButton>
           </Box>

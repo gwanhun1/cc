@@ -1,50 +1,119 @@
+/* 기본 설정 */
 :root {
+  --color: #cf364d; /* 기본 색상 */
+  --background-color: #ffffff; /* 기본 배경색 */
+  --link-color: #cf364d; /* 기본 링크 색상 */
+  --link-hover-color: #747bff; /* 링크 hover 색상 */
+  --today-bg-color: #ffe8f2; /* 오늘 날짜 배경색 */
+  --day-header-bg-color: #d0354e1a; /* 날짜 셀 배경색 */
+}
+
+/* 기본 스타일 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: #444444;
-  background-color: #ffffff;
-
+  color: var(--color); /* 기본 텍스트 색상 */
+  background-color: var(--background-color); /* 기본 배경색 */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 링크 기본 색상 */
 a {
   font-weight: 500;
-  color: #cf364d;
   text-decoration: inherit;
 }
+
+/* 링크 hover 색상 */
 a:hover {
-  color: #cf364d;
+  color: var(--link-hover-color);
 }
 
-body {
-  margin: 0;
-  /* display: flex;
-  place-items: center;
-  justify-content: center; */
-  min-width: 320px;
-  background-color: #efefef;
-}
-
+/* h1 스타일 */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
+/* 기본 body 스타일 */
+body {
+  min-width: 320px;
+  background-color: var(--background-color); /* 기본 배경색 */
+}
+
+/* light 테마에서 색상 설정 */
+.theme-light {
+  --color: #213547; /* 밝은 모드 텍스트 색상 */
+  --background-color: #ffffff; /* 밝은 모드 배경색 */
+  --link-color: #cf364d; /* 기본 링크 색상 */
+  --link-hover-color: #747bff; /* 링크 hover 색상 */
+  --today-bg-color: #ffe8f2; /* 오늘 날짜 배경색 */
+  --day-header-bg-color: #d0354e1a; /* 날짜 셀 배경색 */
+}
+
+/* dark 테마에서 색상 설정 */
+.theme-dark {
+  --color: #efefef; /* 어두운 모드 텍스트 색상 */
+  --background-color: #333333; /* 어두운 모드 배경색 */
+  --link-color: #cf364d; /* 기본 링크 색상 */
+  --link-hover-color: #747bff; /* 링크 hover 색상 */
+  --today-bg-color: #ffe8f2; /* 오늘 날짜 배경색 */
+  --day-header-bg-color: #d0354e1a; /* 날짜 셀 배경색 */
+}
+
+/* 각 테마에 따른 색상 적용 */
+.theme-red {
+  --color: #cf364d; /* 빨간색 텍스트 색상 */
+  --background-color: #ffffff; /* 빨간색 배경색 */
+}
+
+.theme-green {
+  --color: #28a745; /* 초록색 텍스트 색상 */
+  --background-color: #ffffff; /* 초록색 배경색 */
+}
+
+.theme-blue {
+  --color: #007bff; /* 파란색 텍스트 색상 */
+  --background-color: #ffffff; /* 파란색 배경색 */
+}
+
+.theme-black {
+  --color: #ffffff; /* 흰색 텍스트 색상 */
+  --background-color: #333333; /* 검정색 배경색 */
+}
+
+/* media query로 light 모드, dark 모드 처리 */
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  body {
+    background-color: var(--background-color); /* 기본 배경색 */
+    color: var(--color); /* 기본 텍스트 색상 */
   }
-  a:hover {
-    color: #747bff;
-  }
+
+  /* light 모드에서 button 스타일 */
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--background-color); /* 기본 배경색 */
+    color: var(--color); /* 기본 텍스트 색상 */
+  }
+
+  /* dark 모드에서 button 스타일 */
+  button {
+    background-color: #555555;
   }
 }

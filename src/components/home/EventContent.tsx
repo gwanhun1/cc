@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { COLOR } from "../../style/constants";
 import theme from "../../theme";
 
@@ -11,6 +12,8 @@ interface EventContentProps {
 const EventContent = ({ imageUrl, title }: EventContentProps) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const { color } = useUserThemeFetch();
+
   return (
     <Box
       sx={{
@@ -18,7 +21,16 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#d0354e1a",
+        backgroundColor:
+          color === "default"
+            ? "#d0354e1a"
+            : color === "#28a745"
+              ? "#28a74533"
+              : color === "#007bff"
+                ? "#007bff33"
+                : color === "#000000"
+                  ? "#00000033"
+                  : "#6c757d33",
         position: "relative",
         overflow: "hidden",
       }}
@@ -27,7 +39,7 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
         sx={{
           ml: "3px",
           fontWeight: 600,
-          color: COLOR.pink,
+          color: color,
           mb: "2px",
           borderRadius: "0px",
           fontSize: isSmDown ? 6 : 14,

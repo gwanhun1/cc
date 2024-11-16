@@ -5,6 +5,7 @@ import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BasicDatePicker from "../../components/common/DatePicker";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { loadState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
 
@@ -70,12 +71,13 @@ const AddPage = ({ onClose }: AddPageProps) => {
       }
     }
   };
+  const { color } = useUserThemeFetch();
 
   return (
     <form onSubmit={handleSubmit}>
       <Box display="flex" justifyContent="space-between">
         <Box>
-          <Typography variant="h6" color={COLOR.pink} fontWeight="bold">
+          <Typography variant="h6" color={color} fontWeight="bold">
             Save Memories
           </Typography>
           <Typography variant="subtitle2" color={COLOR.gray}>

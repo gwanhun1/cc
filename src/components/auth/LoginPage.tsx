@@ -6,6 +6,7 @@ import logo from "../../assets/logo.png";
 import useAuthService from "../../hooks/useAuthService";
 import { useMonthlyImages } from "../../hooks/useImagesGet";
 import useLoginForm from "../../hooks/useLoginForm";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { currentDateState } from "../../recoil/atoms";
 import { COLOR } from "../../style/constants";
 import { formatYearMonth } from "../../utils/formatYearMonth";
@@ -67,6 +68,8 @@ const LoginPage = ({ closeModal }: LoginPageProps) => {
     }
   };
 
+  const { color } = useUserThemeFetch();
+
   return (
     <Grid container rowSpacing={2}>
       <Grid
@@ -81,21 +84,21 @@ const LoginPage = ({ closeModal }: LoginPageProps) => {
       </Grid>
       <Grid item xs={12}>
         <Typography textAlign="center" color={COLOR.gray}>
-          <span style={{ color: COLOR.pink, fontWeight: "bold", fontSize: 20 }}>
+          <span style={{ color: color, fontWeight: "bold", fontSize: 20 }}>
             CC{" "}
           </span>
           에서는 커플의{" "}
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>사진</span>을{" "}
+          <span style={{ color: color, fontWeight: "bold" }}>사진</span>을{" "}
           <br />
-          멋진 <span style={{ color: COLOR.pink }}>캘린더</span>
+          멋진 <span style={{ color: color }}>캘린더</span>
           로 만들어 드립니다.
           <br />
           매달{" "}
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>
+          <span style={{ color: color, fontWeight: "bold" }}>
             사랑하는 사람
           </span>
           과의
-          <span style={{ color: COLOR.pink, fontWeight: "bold" }}>
+          <span style={{ color: color, fontWeight: "bold" }}>
             <br />
             추억
           </span>
