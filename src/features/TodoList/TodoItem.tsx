@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useTodoDelete } from "../../hooks/useTodoDelete";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { COLOR } from "../../style/constants";
 import { DateFormatHandler } from "./DateFormatHandler";
 import { TodoCheckbox } from "./TodoCheckBox";
@@ -44,6 +45,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     }
   };
 
+  const { color } = useUserThemeFetch();
+
   return (
     <Box
       sx={{
@@ -53,7 +56,17 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         width: "100%",
         my: 1,
         py: 1,
-        bgcolor: hover ? COLOR.lightPink : "transparent",
+        bgcolor: hover
+          ? color === "#cf364d"
+            ? "#d0354e1a"
+            : color === "#28a745"
+              ? "#28a74533"
+              : color === "#007bff"
+                ? "#007bff33"
+                : color === "#000000"
+                  ? "#00000033"
+                  : "#6c757d33"
+          : "transparent",
         transition: "background-color 0.2s ease",
         borderRadius: 2,
       }}

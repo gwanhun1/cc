@@ -36,11 +36,11 @@ const CalendarContainer = () => {
         display="flex"
         flexDirection="column"
         width="100%"
-        bgcolor="#fff"
+        bgcolor={color === "#000000" ? "#0505066a" : "#fff"}
         borderRadius={2}
         p={isMdDown ? 1 : 3}
         sx={{
-          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
+          boxShadow: "5px 4px 10px 6px rgba(36, 36, 36, 0.3)",
           boxSizing: "border-box",
         }}
       >

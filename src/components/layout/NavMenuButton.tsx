@@ -4,10 +4,13 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Typography from "@mui/material/Typography";
 import { useNavMenu } from "../../hooks/useNavMenu";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { COLOR } from "../../style/constants";
 
 const NavMenuButton = ({ icon, label, badge, hasMenu, children, ...props }) => {
   const { anchorEl, isOpen, handleOpenMenu, handleCloseMenu } = useNavMenu();
+
+  const { color } = useUserThemeFetch();
 
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
@@ -60,7 +63,7 @@ const NavMenuButton = ({ icon, label, badge, hasMenu, children, ...props }) => {
             fontWeight: "bold",
             pointerEvents: "none",
           }}
-          color={COLOR.hotpink}
+          color={color}
         >
           {badge}
         </Typography>

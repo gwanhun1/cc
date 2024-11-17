@@ -4,11 +4,26 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import calendar from "../assets/calendar.png";
 import todoList from "../assets/todolist.png";
 import useIsMobile from "../hooks/useIsMobile";
+import { useUserThemeFetch } from "../hooks/useUserThemeFetch";
 import { COLOR } from "../style/constants";
 
 const Home = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { color } = useUserThemeFetch();
+
+  console.log(color);
+
+  const gradientColor =
+    color === "#cf364d"
+      ? `linear-gradient(70deg,#ff5576 30%, #e63d5f 60%, #cf364d 90%)`
+      : color === "#28a745"
+        ? `linear-gradient(70deg,#77ff55 30%, #3de63d 60%, #36cf4d 90%)`
+        : color === "#007bff"
+          ? `linear-gradient(70deg,#3766e8 30%, #3d5fe6 60%, #3636cf 90%)`
+          : color === "#000000"
+            ? `linear-gradient(70deg,#cfcbcb 30%, #e5d9dd 60%, #b6b1b1 90%)`
+            : `linear-gradient(70deg,#423b3c 30%, #2e2326 60%, #171515 90%)`;
 
   return (
     <>
@@ -36,11 +51,12 @@ const Home = () => {
             우리는 무엇을{" "}
             <span
               style={{
-                background: `linear-gradient(70deg,#ff5576 30%, #e63d5f 60%, #cf364d 90%)`,
+                backgroundImage: gradientColor,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
                 color: "transparent",
+                display: "inline",
               }}
             >
               함께

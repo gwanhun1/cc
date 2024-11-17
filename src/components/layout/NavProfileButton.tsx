@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import { SxProps, Theme } from "@mui/system";
 import { useNavMenu } from "../../hooks/useNavMenu";
+import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { COLOR } from "../../style/constants";
 
 interface MenuItemProps {
@@ -31,6 +32,8 @@ const NavProfileButton = ({
   ...props
 }: NavProfileButtonProps) => {
   const { anchorEl, isOpen, handleOpenMenu, handleCloseMenu } = useNavMenu();
+
+  const { color } = useUserThemeFetch();
 
   return (
     <Box sx={{ position: "relative", display: "inline-flex", ...sx }}>
@@ -69,7 +72,7 @@ const NavProfileButton = ({
                   handleCloseMenu();
                 }}
               >
-                <Typography textAlign="center" color={COLOR.hotpink}>
+                <Typography textAlign="center" color={color}>
                   {item.label}
                 </Typography>
               </MenuItem>
@@ -77,7 +80,7 @@ const NavProfileButton = ({
               <Typography
                 key={index}
                 textAlign="center"
-                color={COLOR.hotpink}
+                color={color}
                 minWidth={60}
               >
                 {item.label}

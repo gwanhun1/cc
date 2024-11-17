@@ -22,7 +22,7 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
         display: "flex",
         flexDirection: "column",
         backgroundColor:
-          color === "default"
+          color === "#cf364d"
             ? "#d0354e1a"
             : color === "#28a745"
               ? "#28a74533"
