@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  // datepicker-styles.css
   "custom-datepicker": {
     border: [
       { unit: "px", value: 1 },
@@ -18,7 +17,6 @@ export default StyleSheet.create({
   },
   "custom-datepicker react-datepicker__header": {
     backgroundColor: "COLOR.pink",
-    // Set the background color to your pink color
     borderBottom: [
       { unit: "px", value: 1 },
       { unit: "string", value: "solid" },
@@ -27,12 +25,9 @@ export default StyleSheet.create({
   },
   "custom-datepicker react-datepicker__day--selected": {
     backgroundColor: "COLOR.pink",
-    // Set the selected day background color
     color: "#fff",
-    // Set text color for selected day
   },
   "custom-datepicker react-datepicker__day:hover": {
     backgroundColor: "rgba(255, 105, 180, 0.2)",
-    // Light pink hover effect
   },
 });

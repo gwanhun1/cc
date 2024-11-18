@@ -36,13 +36,11 @@ export function useUserThemeUpload(): UseUserThemeUploadResult {
       const userDocRef = doc(db, "users", auth.currentUser.uid);
       const userDocSnapshot = await getDoc(userDocRef);
 
-      // 문서가 없다면 새로 생성
       if (!userDocSnapshot.exists()) {
         await setDoc(userDocRef, {
           theme: newTheme,
         });
       } else {
-        // 문서가 있으면 업데이트
         await updateDoc(userDocRef, {
           theme: newTheme,
         });
@@ -50,7 +48,6 @@ export function useUserThemeUpload(): UseUserThemeUploadResult {
 
       setStatus("success");
 
-      // 페이지 새로고침
       window.location.reload();
     } catch (err) {
       setStatus("error");

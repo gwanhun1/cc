@@ -11,7 +11,6 @@ interface EventContentProps {
 
 const EventContent = ({ imageUrl, title }: EventContentProps) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
-
   const { color } = useUserThemeFetch();
 
   return (
@@ -55,16 +54,11 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
         sx={{
           flexGrow: 1,
           minHeight: isSmDown ? "50px" : "133px",
-          backgroundImage: `url(${imageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
           borderRadius: "4px",
           width: "100%",
-          cursor: "pointer",
-          transition: "all 0.3s ease-in-out",
           position: "relative",
           zIndex: 1,
+          overflow: "hidden",
           "@keyframes shake": {
             "0%, 100%": { transform: "translateX(0)" },
             "25%": { transform: "translateX(-5px)" },
@@ -75,8 +69,22 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
             zIndex: 100,
           },
         }}
-        aria-label={title}
-      />
+      >
+        <img
+          src={imageUrl}
+          alt={title}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            cursor: "pointer",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
+        />
+      </Box>
     </Box>
   );
 };

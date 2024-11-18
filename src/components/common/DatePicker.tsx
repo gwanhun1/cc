@@ -10,7 +10,7 @@ import { useMonthlyImages } from "../../hooks/useImagesGet";
 import { currentDateState } from "../../recoil/atoms";
 import { formatYearMonth } from "../../utils/formatYearMonth";
 
-dayjs.extend(utc); // Dayjs에 UTC 플러그인 적용
+dayjs.extend(utc);
 
 interface BasicDatePickerProps {
   value: Date | null;

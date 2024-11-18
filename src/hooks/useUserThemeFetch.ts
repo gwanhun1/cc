@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 
-// 테마 설정
 const themes = {
   DEFAULT: "default",
   GREEN: "green",
@@ -13,13 +12,13 @@ const themes = {
 
 const colorMap = {
   default: {
-    primary: "#cf364d", // 기본 색상
+    primary: "#cf364d",
     eventBg: "transparent",
     eventBorder: "none",
     eventText: "inherit",
     eventShadow: "none",
-    todayBg: "#070405", // 오늘 날짜 배경색
-    dayHeaderBg: "#d0354e1a", // 날짜 셀 배경색
+    todayBg: "#070405",
+    dayHeaderBg: "#d0354e1a",
   },
   green: {
     primary: "#28a745",
@@ -27,8 +26,8 @@ const colorMap = {
     eventBorder: "none",
     eventText: "inherit",
     eventShadow: "none",
-    todayBg: "#e5f9e5", // 오늘 날짜 배경색
-    dayHeaderBg: "#28a74533", // 날짜 셀 배경색
+    todayBg: "#e5f9e5",
+    dayHeaderBg: "#28a74533",
   },
   blue: {
     primary: "#007bff",
@@ -36,8 +35,8 @@ const colorMap = {
     eventBorder: "none",
     eventText: "inherit",
     eventShadow: "none",
-    todayBg: "#d1e9ff", // 오늘 날짜 배경색
-    dayHeaderBg: "#007bff33", // 날짜 셀 배경색
+    todayBg: "#d1e9ff",
+    dayHeaderBg: "#007bff33",
   },
   black: {
     primary: "#000000",
@@ -45,8 +44,8 @@ const colorMap = {
     eventBorder: "none",
     eventText: "inherit",
     eventShadow: "none",
-    todayBg: "#333333", // 오늘 날짜 배경색
-    dayHeaderBg: "#00000033", // 날짜 셀 배경색
+    todayBg: "#333333",
+    dayHeaderBg: "#00000033",
   },
   gray: {
     primary: "#6c757d",
@@ -54,19 +53,19 @@ const colorMap = {
     eventBorder: "none",
     eventText: "inherit",
     eventShadow: "none",
-    todayBg: "#f1f1f1", // 오늘 날짜 배경색
-    dayHeaderBg: "#6c757d33", // 날짜 셀 배경색
+    todayBg: "#f1f1f1",
+    dayHeaderBg: "#6c757d33",
   },
 };
 
 type UseUserThemeFetchResult = {
-  color: string; // 색상만 리턴하도록 수정
+  color: string;
   status: "idle" | "loading" | "success" | "error";
   error: string | null;
 };
 
 export function useUserThemeFetch(): UseUserThemeFetchResult {
-  const [color, setColor] = useState<string>(colorMap.default.primary); // 기본값으로 cf364d 설정
+  const [color, setColor] = useState<string>(colorMap.default.primary);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -92,15 +91,13 @@ export function useUserThemeFetch(): UseUserThemeFetchResult {
 
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data();
-          const theme = userData?.theme || themes.DEFAULT; // 없으면 기본값
+          const theme = userData?.theme || themes.DEFAULT;
 
-          // 해당 테마가 colorMap에 존재하는지 확인하고 기본값을 설정
           const selectedTheme =
             colorMap[theme.toLowerCase()] || colorMap.default;
-          setColor(selectedTheme.primary); // 색상 업데이트
+          setColor(selectedTheme.primary);
 
-          // :root의 --color 값을 동적으로 변경
-          document.body.classList.add(`theme-${theme.toLowerCase()}`); // body에 테마 클래스 추가
+          document.body.classList.add(`theme-${theme.toLowerCase()}`);
           setStatus("success");
         } else {
           setStatus("error");
@@ -117,7 +114,7 @@ export function useUserThemeFetch(): UseUserThemeFetchResult {
     };
 
     fetchUserTheme();
-  }, [auth.currentUser?.uid, db]); // auth.currentUser?.uid만 의존성으로 추가
+  }, [auth.currentUser?.uid, db]);
 
   return { color, status, error };
 }

@@ -56,7 +56,6 @@ function useUserData() {
       }
     });
 
-    // Clean up 함수
     return () => unsubscribe();
   }, []);
 

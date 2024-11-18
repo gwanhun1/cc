@@ -1,10 +1,9 @@
 import { createTheme } from "@mui/material/styles";
 
-// 기본 테마 설정
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#cf364d", // 기본 색상
+      main: "#cf364d",
     },
     secondary: {
       main: "#e4203d",
@@ -15,17 +14,17 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiInputLabel-root": {
-            color: "#cf364d", // 기본 색상
+            color: "#cf364d",
           },
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
-              borderColor: "#cf364d", // 기본 색상
+              borderColor: "#cf364d",
             },
             "&:hover fieldset": {
-              borderColor: "#cf364d", // 기본 색상
+              borderColor: "#cf364d",
             },
             "&.Mui-focused fieldset": {
-              borderColor: "#cf364d", // 기본 색상
+              borderColor: "#cf364d",
             },
           },
         },
@@ -52,14 +51,14 @@ const theme = createTheme({
   },
 });
 
-// 동적 테마 생성 함수
+// 동적 테마 생성
 export const getDynamicTheme = (primaryColor: string) => {
   return createTheme({
-    ...theme, // 기본 테마 복사
+    ...theme,
     palette: {
       ...theme.palette,
       primary: {
-        main: primaryColor, // 동적으로 전달받은 색상 사용
+        main: primaryColor,
       },
     },
     components: {
@@ -68,17 +67,17 @@ export const getDynamicTheme = (primaryColor: string) => {
         styleOverrides: {
           root: {
             "& .MuiInputLabel-root": {
-              color: primaryColor, // 동적 색상
+              color: primaryColor,
             },
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
-                borderColor: primaryColor, // 동적 색상
+                borderColor: primaryColor,
               },
               "&:hover fieldset": {
-                borderColor: primaryColor, // 동적 색상
+                borderColor: primaryColor,
               },
               "&.Mui-focused fieldset": {
-                borderColor: primaryColor, // 동적 색상
+                borderColor: primaryColor,
               },
             },
           },
@@ -87,17 +86,17 @@ export const getDynamicTheme = (primaryColor: string) => {
       MuiButton: {
         styleOverrides: {
           contained: {
-            backgroundColor: primaryColor, // 동적 색상
+            backgroundColor: primaryColor,
             color: "white",
             "&:hover": {
-              backgroundColor: primaryColor, // 동적 색상
+              backgroundColor: primaryColor,
             },
           },
           outlined: {
-            borderColor: primaryColor, // 동적 색상
-            color: primaryColor, // 동적 색상
+            borderColor: primaryColor,
+            color: primaryColor,
             "&:hover": {
-              borderColor: primaryColor, // 동적 색상
+              borderColor: primaryColor,
             },
           },
         },
