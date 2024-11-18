@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Skeleton, Typography, useMediaQuery } from "@mui/material";
 import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { COLOR } from "../../style/constants";
 import theme from "../../theme";
@@ -12,6 +12,7 @@ interface EventContentProps {
 const EventContent = ({ imageUrl, title }: EventContentProps) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const { color } = useUserThemeFetch();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <Box
@@ -70,6 +71,19 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
           },
         }}
       >
+        {!imageLoaded && (
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height="100%"
+            animation="wave"
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+          />
+        )}
         <img
           src={imageUrl}
           alt={title}
@@ -82,7 +96,10 @@ const EventContent = ({ imageUrl, title }: EventContentProps) => {
             position: "absolute",
             top: 0,
             left: 0,
+            opacity: imageLoaded ? 1 : 0,
+            transition: "opacity 0.3s ease-in-out",
           }}
+          onLoad={() => setImageLoaded(true)}
         />
       </Box>
     </Box>
