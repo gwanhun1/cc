@@ -29,6 +29,30 @@ const modalSizes = {
   },
 };
 
+// 모달 스타일을 분리하여 사용
+const modalStyles = (
+  width: "xs" | "sm" | "md" | "lg" | "xl",
+  height: "xs" | "sm" | "md" | "lg" | "xl",
+): SxProps<Theme> => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  outline: "none",
+  padding: 2,
+  borderRadius: 3,
+  width: modalSizes.width[width],
+  height: modalSizes.height[height],
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  "@media (max-width:600px)": {
+    width: "98%",
+  },
+});
+
 const CustomModal = ({
   isOpen,
   onClose,
@@ -38,26 +62,6 @@ const CustomModal = ({
   height = "md",
   ...modalProps
 }: CustomModalProps) => {
-  const modalStyles: SxProps<Theme> = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    outline: "none",
-    padding: 2,
-    borderRadius: 3,
-    width: modalSizes.width[width],
-    height: modalSizes.height[height],
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    "@media (max-width:600px)": {
-      width: "98%",
-    },
-  };
-
   return (
     <Modal
       open={isOpen}
@@ -69,7 +73,7 @@ const CustomModal = ({
       BackdropComponent={CustomBackdrop}
       {...modalProps}
     >
-      <Box sx={modalStyles}>
+      <Box sx={modalStyles(width, height)}>
         <Box sx={{ flexGrow: 1 }}>{children}</Box>
         <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
           {onClose && (

@@ -19,6 +19,17 @@ import theme from "../../theme";
 import AddPage from "./AddPage";
 import Calendar from "./Calendar";
 
+// 공통 버튼 스타일
+const buttonStyles = (isSmDown: boolean) => ({
+  mt: isSmDown ? 1.5 : 4,
+  padding: isSmDown ? 0.5 : undefined,
+});
+
+const iconButtonStyles = (isSmDown: boolean, color: string) => ({
+  color: color,
+  fontSize: isSmDown ? 30 : 60,
+});
+
 const CalendarContainer = () => {
   const [upload] = useRecoilState(loadState);
   const navigate = useNavigate();
@@ -27,7 +38,6 @@ const CalendarContainer = () => {
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
   const { isOpen, openModal, closeModal } = useModal();
-
   const { color } = useUserThemeFetch();
 
   return (
@@ -52,10 +62,7 @@ const CalendarContainer = () => {
           <Box>
             <Button
               variant="outlined"
-              sx={{
-                mt: isSmDown ? 1.5 : 4,
-                padding: isSmDown ? 0.5 : undefined,
-              }}
+              sx={buttonStyles(isSmDown)}
               onClick={() => navigate("/todoList")}
             >
               <Typography
@@ -67,14 +74,10 @@ const CalendarContainer = () => {
             </Button>
           </Box>
           <Box display="flex" justifyContent="flex-end">
-            <IconButton
-              aria-label="delete"
-              size="medium"
-              onClick={() => openModal()}
-            >
+            <IconButton aria-label="add" size="medium" onClick={openModal}>
               <AddCircleIcon
                 fontSize="inherit"
-                sx={{ color: color, fontSize: isSmDown ? 30 : 60 }}
+                sx={iconButtonStyles(isSmDown, color)}
               />
             </IconButton>
           </Box>

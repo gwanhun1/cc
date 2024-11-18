@@ -23,6 +23,7 @@ const AddPage = ({ onClose }: AddPageProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { uploadImage, status, error } = useImageUpload();
+  const { color } = useUserThemeFetch();
 
   const handleBoxClick = () => {
     if (fileInputRef.current) {
@@ -46,20 +47,13 @@ const AddPage = ({ onClose }: AddPageProps) => {
     e.preventDefault();
 
     if (selectedImage && title && date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-
       try {
         await uploadImage({
           file: selectedImage,
           title,
           date: date.toISOString(),
         });
-        setSelectedImage(null);
-        setPreviewImage(null);
-        setTitle("");
-        setDate(null);
+        resetForm();
         onClose();
         setUpload(true);
 
@@ -71,7 +65,13 @@ const AddPage = ({ onClose }: AddPageProps) => {
       }
     }
   };
-  const { color } = useUserThemeFetch();
+
+  const resetForm = () => {
+    setSelectedImage(null);
+    setPreviewImage(null);
+    setTitle("");
+    setDate(null);
+  };
 
   return (
     <form onSubmit={handleSubmit}>

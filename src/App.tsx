@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ThemeProvider } from "@emotion/react";
 import Loading from "./components/common/Loading";
 import Footer from "./components/layout/Footer";
 import Nav from "./components/layout/Nav";
 import { useUserThemeFetch } from "./hooks/useUserThemeFetch";
-import Layout from "./layout/layout";
+import Layout from "./layout/Layout";
 import { Router } from "./Router";
 import { getDynamicTheme } from "./theme";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("authToken");
+  const token = useMemo(() => localStorage.getItem("authToken"), []);
+  const { color, status } = useUserThemeFetch();
 
   useEffect(() => {
     const checkToken = async () => {
@@ -22,24 +23,20 @@ const App = () => {
     checkToken();
   }, [token]);
 
-  const { color, status } = useUserThemeFetch();
+  const dynamicTheme = useMemo(() => getDynamicTheme(color), [color]);
 
   if (isLoading || status === "loading") {
     return <Loading />;
   }
 
-  const dynamicTheme = getDynamicTheme(color);
-
   return (
-    <>
-      <ThemeProvider theme={dynamicTheme}>
-        <Nav />
-        <Layout>
-          <Router />
-        </Layout>
-        <Footer />
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={dynamicTheme}>
+      <Nav />
+      <Layout>
+        <Router />
+      </Layout>
+      <Footer />
+    </ThemeProvider>
   );
 };
 
