@@ -6,110 +6,56 @@
 ## 🌟 프로젝트 개요
 
 - **일정 공유 및 기록**
-  - 커플들이 일정과 To-Do 리스트를 공유하고 사진으로 기록하여 시각적으로 추억을 저장하는 서비스.
+  - 커플들이 일정과 To-Do 리스트를 공유하고 사진으로 기록하여 시각적으로 추억을 저장하는 서비스
 - **캘린더 커스터마이징**
-  - Material-UI 캘린더를 커스터마이징해 일정 제목 및 사진 추가 기능 구현.
+  - Material-UI 캘린더를 커스터마이징해 일정 제목 및 사진 추가 기능 구현
 - **연동된 To-Do 리스트**
-  - To-Do 리스트와 캘린더를 연동하여 일정 완료 후 사진 기록 및 저장 가능.
+  - To-Do 리스트와 캘린더를 연동하여 일정 완료 후 사진 기록 및 저장 가능
 
-## 🛠️ 담당 기능
+## 🛠️ 주요 기능 및 기술
 
-- **Atomic 디자인 패턴 적용**
-  - 반복되는 레이아웃과 UI를 컴포넌트 단위로 분리하여 **재사용성** 및 **유지보수성**을 향상.
-- **Recoil을 활용한 전역 데이터 관리**
-  - 날짜 데이터를 Recoil로 관리하여 **페이지 간 데이터 일관성** 유지.
-- **이미지 로딩 속도 최적화**
-  - Firebase에서 이미지를 불러오는 속도를 개선하기 위해 저장 시 이미지 압축을 적용.
-- **반응형 웹 제작**
-  - 다양한 디바이스(폰, 태블릿, PC)에서 적절히 동작하도록 UI/UX 최적화.
-- **Vercel 자동 배포**
-  - Vercel을 통해 배포 프로세스를 자동화하고, 개발/운영 효율성을 극대화.
+### 기능
+- **일정 관리**
+  - 캘린더를 통한 직관적인 일정 관리
+  - 날짜별 To-Do 리스트 생성 및 관리
+  - 일정 완료 시 사진 업로드 기능
+- **테마 커스터마이징**
+  - 5가지 테마 색상 선택 가능
+  - 사용자 취향에 맞는 UI 커스터마이징
+- **반응형 디자인**
+  - 모바일, 태블릿, 데스크톱 환경 지원
+  - 디바이스별 최적화된 UI/UX 제공
 
-## 🚀 사용 기술
+### 기술 스택
+- **Frontend**
+  - TypeScript
+  - React 18
+  - Material-UI
+  - Styled-Components
+- **상태 관리**
+  - Recoil
+- **백엔드/인프라**
+  - Firebase (Authentication, Firestore, Storage)
+  - Vercel (배포)
 
-- **Frontend:** TypeScript, React, Styled-Components, Material-UI
-- **State Management:** Recoil
-- **Backend:** Axios, Firebase
-- **배포:** Vercel
-
-## 🔧 트러블슈팅
-
-### 이미지 로딩 속도 최적화
-
-#### 문제 상황
-
-- Firebase에서 이미지를 렌더링할 때 지연이 발생하여 사용자 경험 저하.
-
-#### 해결 방법
-
-1. **렌더링 방식 변경**
-   - 기존: `div`의 `backgroundImage` 속성을 사용하여 이미지 배치 제어.
-   - 변경: `<img>` 태그로 변경해 브라우저 최적화와 렌더링 성능 개선.
-     - **이점**:
-       - 브라우저가 **이미지 로딩을 더 높은 우선순위**로 처리.
-       - **레이어 처리**를 단순화해 렌더링 최적화.
-       - HTML 표준 요소로 **더 빠른 로딩 시작**.
-   - `background-size`, `background-position`의 제어 필요성을 `<img>` 태그의 CSS 스타일로 대체.
-2. **이미지 파일 압축**
-   - 저장 시 압축 알고리즘을 적용해 파일 크기를 최소화하며 품질 저하를 방지.
-   - 로딩 시간이 평균 40% 단축됨.
-
-## 📁 폴더 구조
+## 🔧 프로젝트 구조
 
 ```
-root
-├─ package.json
-├─ package-lock.json
-├─ vite.config.js
-├─ .eslintrc
-├─ .prettierrc
-├─ firebase.json
-├─ tsconfig.json
-├─ Router.jsx
-├─ public
-├─ src
-│  ├─ App.tsx
-│  ├─ index.tsx
-│  ├─ features
-│  │  └─ pages
-│  ├─ components
-│  │  ├─ auth
-│  │  ├─ common
-│  │  ├─ layout
-│  │  └─ home
-│  ├─ hooks
-│  ├─ layout
-│  ├─ pages
-│  ├─ recoil
-│  ├─ style
-│  ├─ types
-│  ├─ utils
-│  └─ assets
-└─ README.md
+src
+├─ features/           # 주요 기능별 컴포넌트
+│  ├─ Calendar/       # 캘린더 관련 컴포넌트
+│  └─ TodoList/       # Todo 관련 컴포넌트
+├─ components/         # 공통 컴포넌트
+│  ├─ auth/           # 인증 관련 컴포넌트
+│  ├─ common/         # 공통 UI 컴포넌트
+│  └─ layout/         # 레이아웃 컴포넌트
+├─ hooks/             # 커스텀 훅
+├─ recoil/            # Recoil 상태 관리
+├─ style/             # 전역 스타일
+└─ utils/             # 유틸리티 함수
 ```
 
-#### `폴더구조`
-
-- components - 컴포넌트 모음(재사용 o)
-- components/pages 페이지 내 컴포넌트 모음
-- hooks - 리액트 구성 훅 모음(재사용 o)
-- hooks - 훅 모음
-- layouts - 기본적인 틀 제공
-- features - 각 서비스 모음
-- pages - 각 페이지 모음
-- Router - 라우터 설정 모음
-- recoil - 리코일
-- types - type 정의 모음
-- utils - 유틸리티 모음
-
-<br /><br />
-
-## 📊 데이터 시각화 및 주요 화면
-
-### 📅 일정 공유 및 기록
-
-- 커플들이 함께하는 일정을 캘린더에 저장하고 사진으로 추억을 남길 수 있는 기능.
-- Material-UI 캘린더를 활용하여 사용자 친화적인 UI 제공.
+## 📱 주요 화면
 
 | 이미지                                                                                                   | 제목            | 설명                                   |
 | -------------------------------------------------------------------------------------------------------- | --------------- | -------------------------------------- |
@@ -121,20 +67,48 @@ root
 | <img src="https://github.com/user-attachments/assets/f6559851-ac56-47e6-91f5-62e11e3d9551" width="400"/> | 5가지 테마 선택 | 다양한 테마로 페이지 스타일 변경 가능  |
 | <img src="https://github.com/user-attachments/assets/9ef637f6-c03b-4a84-a7a1-c79e8b9c51b4" width="400"/> | 반응형 페이지   | 모바일, 태블릿, PC 환경에 적응 가능    |
 
-## 📌 주요 성과
+## 🔍 주요 개선사항
 
-1. **이미지 렌더링 속도 개선**
-   - Firebase 이미지 로딩 속도를 평균 40% 단축.
-   - 최적화된 렌더링 방식 도입으로 사용자 경험 향상.
-2. **Atomic 디자인 패턴 도입**
-   - 컴포넌트 재사용성을 극대화하여 유지보수 시간 절감.
-3. **반응형 UI 제작**
-   - 다양한 디바이스에서 일관된 사용자 경험 제공.
+### 1. 타입 시스템 강화
+- TypeScript 타입 정의 개선
+- 날짜 관련 타입 안정성 강화 (Date 객체 → ISO 문자열)
+- 컴포넌트 props 타입 체계화
 
----
+### 2. 성능 최적화
+- React.memo를 통한 불필요한 리렌더링 방지
+- 이미지 최적화 처리
+- Firebase 데이터 요청 최적화
 
-## 🔗 참고 링크
+### 3. 코드 품질 개선
+- 컴포넌트 구조 개선
+- 재사용 가능한 커스텀 훅 개발
+- 일관된 코드 스타일 적용
 
-- **GitHub Repository:** [커플 일정 공유 및 기록 서비스](https://github.com/gwanhun1/cc)
+## 🚀 실행 방법
 
----
+1. 저장소 클론
+```bash
+git clone https://github.com/gwanhun1/cc.git
+```
+
+2. 의존성 설치
+```bash
+npm install
+```
+
+3. 개발 서버 실행
+```bash
+npm run dev
+```
+
+## 📌 향후 계획
+
+- [ ] 테스트 코드 추가
+- [ ] 성능 모니터링 도구 도입
+- [ ] 사진 압축 알고리즘 개선
+- [ ] PWA 지원 추가
+
+## 🔗 링크
+
+- [GitHub Repository](https://github.com/gwanhun1/cc)
+- [배포 사이트](배포된 사이트 URL)
