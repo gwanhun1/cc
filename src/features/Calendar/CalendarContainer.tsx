@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Box,
@@ -20,51 +20,54 @@ import AddPage from "./AddPage";
 
 const Calendar = React.lazy(() => import("./Calendar"));
 
-// 공통 버튼 스타일
-const buttonStyles = (isSmDown: boolean) => ({
-  mt: isSmDown ? 1.5 : 4,
-  padding: isSmDown ? 0.5 : undefined,
-});
-
-const iconButtonStyles = (isSmDown: boolean, color: string) => ({
-  color: color,
-  fontSize: isSmDown ? 30 : 60,
-});
-
-const CalendarContainer = () => {
-  const [upload] = useRecoilState(loadState);
+const CalendarContainer = React.memo(() => {
+  const upload = useRecoilValue(loadState);
   const navigate = useNavigate();
-
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
-
   const { isOpen, openModal, closeModal } = useModal();
   const { color } = useUserThemeFetch();
 
+  const handleNavigate = useCallback(() => {
+    navigate("/todoList");
+  }, [navigate]);
+
+  const containerStyles = useMemo(() => ({
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    bgcolor: color === "#000000" ? "#0505066a" : "#fff",
+    borderRadius: 2,
+    p: isMdDown ? 1 : 3,
+    boxShadow: "5px 4px 10px 6px rgba(36, 36, 36, 0.3)",
+    boxSizing: "border-box",
+  }), [color, isMdDown]);
+
+  const buttonStyle = useMemo(() => ({
+    mt: isSmDown ? 1.5 : 4,
+    padding: isSmDown ? 0.5 : undefined,
+  }), [isSmDown]);
+
+  const iconStyle = useMemo(() => ({
+    color: color,
+    fontSize: isSmDown ? 30 : 60,
+  }), [color, isSmDown]);
+
+  const headerStyle = useMemo(() => ({
+    display: "flex",
+    justifyContent: "space-between",
+    mb: isSmDown ? 0 : 1,
+  }), [isSmDown]);
+
   return (
     <AuthGuard>
-      <Box
-        display="flex"
-        flexDirection="column"
-        width="100%"
-        bgcolor={color === "#000000" ? "#0505066a" : "#fff"}
-        borderRadius={2}
-        p={isMdDown ? 1 : 3}
-        sx={{
-          boxShadow: "5px 4px 10px 6px rgba(36, 36, 36, 0.3)",
-          boxSizing: "border-box",
-        }}
-      >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          mb={isSmDown ? 0 : 1}
-        >
+      <Box sx={containerStyles}>
+        <Box sx={headerStyle}>
           <Box>
             <Button
               variant="outlined"
-              sx={buttonStyles(isSmDown)}
-              onClick={() => navigate("/todoList")}
+              sx={buttonStyle}
+              onClick={handleNavigate}
             >
               <Typography
                 variant={isSmDown ? "body1" : "subtitle2"}
@@ -78,7 +81,7 @@ const CalendarContainer = () => {
             <IconButton aria-label="add" size="medium" onClick={openModal}>
               <AddCircleIcon
                 fontSize="inherit"
-                sx={iconButtonStyles(isSmDown, color)}
+                sx={iconStyle}
               />
             </IconButton>
           </Box>
@@ -96,6 +99,6 @@ const CalendarContainer = () => {
       </Box>
     </AuthGuard>
   );
-};
+});
 
 export default CalendarContainer;

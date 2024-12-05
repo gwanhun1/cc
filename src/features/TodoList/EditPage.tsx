@@ -1,54 +1,56 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import useIsMobile from "../../hooks/useIsMobile";
 import { useTodoUpload } from "../../hooks/useTodoUpload";
 
-type EditPageProps = { setEdit: any; refetch: any };
+interface EditPageProps {
+  setEdit: (value: boolean) => void;
+  refetch: () => void;
+}
 
-const EditPage = ({ setEdit, refetch }: EditPageProps) => {
+const EditPage: React.FC<EditPageProps> = React.memo(({ setEdit, refetch }) => {
   const isMobile = useIsMobile();
-  const [date, setDate] = useState<Dayjs | null | undefined>(null);
-  const [memo, setMemo] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setMemo(event.target.value);
-  };
-
-  const handleDateChange = (newValue: Dayjs | null) => {
-    setDate(newValue);
-    setOpen(false);
-  };
-
-  const handleCancel = () => {
-    setEdit(false);
-  };
-
-  //일정 등록
+  const [date, setDate] = useState<Dayjs | null>(null);
+  const [memo, setMemo] = useState<string>("");
   const { uploadTodoItem, status, error } = useTodoUpload();
 
-  const handleSave = async () => {
-    if (memo && memo.length > 0 && date !== null) {
-      try {
-        await uploadTodoItem({
-          text: memo,
-          date: date ? date.toDate() : null,
-        });
-        refetch();
-      } catch (error) {
-        console.error("업로드 실패:", error);
-        alert("업로드에 실패했습니다.");
-      }
-    } else {
-      alert("빠진 곳이 있습니다.");
-    }
-  };
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setMemo(event.target.value);
+  }, []);
 
-  //모달 닫기
+  const handleDateChange = useCallback((newValue: Dayjs | null) => {
+    setDate(newValue);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setEdit(false);
+  }, [setEdit]);
+
+  const handleSave = useCallback(async () => {
+    if (!memo || memo.length === 0) {
+      alert("일정을 입력해주세요.");
+      return;
+    }
+    if (!date) {
+      alert("날짜를 선택해주세요.");
+      return;
+    }
+
+    try {
+      await uploadTodoItem({
+        text: memo,
+        date: date.toISOString(),
+      });
+      refetch();
+    } catch (error) {
+      console.error("업로드 실패:", error);
+      alert("업로드에 실패했습니다.");
+    }
+  }, [memo, date, uploadTodoItem, refetch]);
+
   useEffect(() => {
     if (status === "success") {
       setEdit(false);
@@ -81,7 +83,7 @@ const EditPage = ({ setEdit, refetch }: EditPageProps) => {
           fullWidth
           label="일정을 적어주세요."
           sx={{ marginTop: 1 }}
-          value={memo || ""}
+          value={memo}
           onChange={handleChange}
           size="small"
         />
@@ -89,6 +91,7 @@ const EditPage = ({ setEdit, refetch }: EditPageProps) => {
         {status === "uploading" && <p>업로드 중...</p>}
         {status === "success" && <p>할 일이 추가되었습니다!</p>}
         {status === "error" && <p>오류: {error}</p>}
+        
         <Box width="100%" textAlign="end" marginTop={2}>
           <Button
             variant="outlined"
@@ -97,13 +100,17 @@ const EditPage = ({ setEdit, refetch }: EditPageProps) => {
           >
             취소
           </Button>
-          <Button variant="contained" onClick={handleSave}>
+          <Button 
+            variant="contained" 
+            onClick={handleSave}
+            disabled={status === "uploading"}
+          >
             저장
           </Button>
         </Box>
       </Box>
     </LocalizationProvider>
   );
-};
+});
 
 export default EditPage;

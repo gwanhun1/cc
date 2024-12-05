@@ -18,7 +18,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onToggle }) => {
           text={todo.text}
           date={todo.date}
           completed={todo.completed}
-          currentMonthKey={todo.date}
+          currentMonthKey={todo.date || ''}
           onToggle={() => onToggle(todo.id)}
         />
       ))}

@@ -11,7 +11,7 @@ import {
 
 type TodoItemInput = {
   text: string | null;
-  date: Date | null;
+  date: string | null;
 };
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
@@ -50,7 +50,7 @@ export function useTodoUpload(): UseTodoUploadResult {
 
       const offset = new Date().getTimezoneOffset() * 60000;
       const localDate = todoData.date
-        ? new Date(todoData.date.getTime() - offset).toISOString()
+        ? new Date(todoData.date).toISOString()
         : null;
 
       const docRef = await addDoc(todosCollectionRef, {

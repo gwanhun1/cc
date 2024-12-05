@@ -1,31 +1,40 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, styled } from "@mui/material";
 import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 
-const StyledFab = styled(Fab)<{ color: string }>(({ theme, color }) => ({
+interface StyledFabProps {
+  customColor: string;
+}
+
+const StyledFab = styled(Fab)<StyledFabProps>(({ theme, customColor }) => ({
   position: "absolute",
   bottom: 24,
   right: 24,
-  backgroundColor: color,
+  backgroundColor: customColor,
   "&:hover": {
     backgroundColor: theme.palette.secondary.main,
   },
 }));
 
-type AddButtonProps = { setEdit: any };
+interface AddButtonProps {
+  setEdit: (value: boolean) => void;
+}
 
-export const AddButton = ({ setEdit }: AddButtonProps) => {
+export const AddButton = memo<AddButtonProps>(({ setEdit }) => {
   const { color } = useUserThemeFetch();
+  
+  const handleClick = useCallback(() => {
+    setEdit(true);
+  }, [setEdit]);
 
   return (
     <StyledFab
       aria-label="add"
-      onClick={() => setEdit(true)}
-      color="default"
-      style={{ backgroundColor: color }}
+      onClick={handleClick}
+      customColor={color}
     >
       <AddIcon sx={{ color: "#fff" }} />
     </StyledFab>
   );
-};
+});

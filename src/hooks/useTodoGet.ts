@@ -8,7 +8,7 @@ import { errorState, fetchStatusState, todosState } from "../recoil/atoms";
 export type TodoItemType = {
   id: string | number;
   text: string | null;
-  date: Date | null;
+  date: string | null; // Change from Date | null to string | null
   completed: boolean;
   timestamp: any;
 };
