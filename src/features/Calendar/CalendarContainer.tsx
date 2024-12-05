@@ -17,7 +17,8 @@ import { useUserThemeFetch } from "../../hooks/useUserThemeFetch";
 import { loadState } from "../../recoil/atoms";
 import theme from "../../theme";
 import AddPage from "./AddPage";
-import Calendar from "./Calendar";
+
+const Calendar = React.lazy(() => import("./Calendar"));
 
 // 공통 버튼 스타일
 const buttonStyles = (isSmDown: boolean) => ({
